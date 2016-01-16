@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:scrollbars="vertical"
     android:textAlignment="center"
+    android:background="#ffffff"
     >
 
 
@@ -51,7 +52,6 @@
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:context="com.sayaanand.helloworld.MainActivityFragment"
                 android:paddingTop="20dp"
                 >
 
@@ -136,7 +136,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/button_calendar"
                         android:id="@+id/button_calendar"
-                        android:onClick="showDatePickerDialog"
+
                         android:clickable="true"
                         android:textAlignment="center"
                         style="@style/Base.Widget.AppCompat.Button.Colored" />
@@ -157,7 +157,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/button_save"
                         android:id="@+id/button_save"
-                        android:onClick="sendMessage"
+
                         android:textColor="#f78d1b"
                         android:background="#18f9f1"
                         android:layout_margin="30dp"
@@ -168,7 +168,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/button_clear"
                         android:id="@+id/button_clear"
-                        android:onClick="clearForm"
+
                         android:textColor="#f78d1b"
                         android:background="#18f9f1"
                         android:layout_margin="30dp"

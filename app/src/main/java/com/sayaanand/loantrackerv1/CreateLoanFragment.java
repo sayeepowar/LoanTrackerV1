@@ -3,10 +3,23 @@ package com.sayaanand.loantrackerv1;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 /**
@@ -17,11 +30,17 @@ import android.view.ViewGroup;
  * Use the {@link CreateLoanFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CreateLoanFragment extends Fragment {
+public class CreateLoanFragment extends Fragment implements android.view.View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private  int year;
+    private int month;
+    private int day;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+    static final int DATE_DIALOG_ID = 999;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -32,6 +51,8 @@ public class CreateLoanFragment extends Fragment {
     public CreateLoanFragment() {
         // Required empty public constructor
     }
+
+
 
     /**
      * Use this factory method to create a new instance of
@@ -64,7 +85,22 @@ public class CreateLoanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_loan, container, false);
+        View view = inflater.inflate(R.layout.fragment_create_loan, container, false);
+        android.widget.Button buttonSave = (android.widget.Button)view.findViewById(R.id.button_save);
+        buttonSave.setOnClickListener(this);
+
+        android.widget.Button buttonClear = (android.widget.Button)view.findViewById(R.id.button_clear);
+        buttonClear.setOnClickListener(this);
+
+        android.widget.Button buttonCalendar = (android.widget.Button)view.findViewById(R.id.button_calendar);
+        buttonCalendar.setOnClickListener(this);
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        setCurrentDateOnView();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -104,5 +140,86 @@ public class CreateLoanFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onClick(View v)  {
+        switch (v.getId()) {
+            case R.id.button_save :
+                onSave();
+                break;
+            case R.id.button_clear:
+                onClear();
+                break;
+            case R.id.button_calendar:
+                showDatePickerDialog();
+                break;
+
+        }
+    }
+
+    public void showDatePickerDialog() {
+        DialogFragment newFragment = new SelectDateFragment();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        newFragment.show(transaction, "datePicker");
+    }
+
+    public void onSave() {
+        android.util.Log.i("LC", "Inside onSave");
+    }
+
+    public void onClear() {
+        android.util.Log.i("LC", "Inside onCleare");
+    }
+
+    private void setCurrentDateOnView() {
+        final Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        String date = sdf.format(c.getTime());
+        // set current date into textview
+        setDisplayDate(date);
+        // set current date into datepicker
+        setDatePickerDate(year, month, day);
+    }
+
+    private void setDisplayDate(String date) {
+        EditText tvDisplayDate = (EditText) getView().findViewById(R.id.emidate_ip_val);
+        tvDisplayDate.setText(date);
+    }
+    private void setDatePickerDate(int year, int month, int day) {
+        android.widget.DatePicker dpResult = (DatePicker) getView().findViewById(R.id.dpResult);
+        dpResult.init(year, month, day, null);
+    }
+
+    class SelectDateFragment extends DialogFragment implements android.app.DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar = Calendar.getInstance();
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            return new DatePickerDialog(getActivity(), this, yy, mm, dd);
+        }
+
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+            year = selectedYear;
+            month = selectedMonth;
+            day = selectedDay;
+
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.YEAR, year);
+            c.set(Calendar.MONTH, month);
+            c.set(Calendar.DAY_OF_MONTH, day);
+            // set selected date into textview
+            setDisplayDate(sdf.format(c.getTime()));
+
+            // set selected date into datepicker also
+            setDatePickerDate(year, month, day);
+        }
     }
 }

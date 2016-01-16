@@ -3,13 +3,28 @@ package com.sayaanand.loantrackerv1;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.sayaanand.loantrackerv1.utils.LoggerUtils;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+public class MainActivity extends AppCompatActivity implements CreateLoanFragment.OnFragmentInteractionListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +58,36 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_create_loan :
+                loadCreateLoanForm();
+                return true;
+            case R.id.action_show_loans:
+                return true;
+            case R.id.action_show_alerts:
+                return true;
+            case R.id.action_showhelp:
+                return true;
+            case R.id.action_settings:
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadCreateLoanForm() {
+        LoggerUtils.logInfo("Create Loan");
+        CreateLoanFragment createLoanFragment = new CreateLoanFragment();
+        Bundle args = new Bundle();
+        createLoanFragment.setArguments(args);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment, createLoanFragment);
+        transaction.addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    @java.lang.Override
+    public void onFragmentInteraction(android.net.Uri uri) {
+        android.util.Log.i("LC", "Fragment Interaction");
     }
 }
