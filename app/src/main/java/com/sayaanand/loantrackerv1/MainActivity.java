@@ -16,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
 import com.sayaanand.loantrackerv1.utils.LoggerUtils;
 
 import java.text.DecimalFormat;
@@ -25,6 +26,7 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements CreateLoanFragment.OnFragmentInteractionListener {
 
+    private LoanTrackerDBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements CreateLoanFragmen
                         .setAction("Action", null).show();
             }
         });
+        dbHelper = new LoanTrackerDBHelper(this);
     }
 
     @Override

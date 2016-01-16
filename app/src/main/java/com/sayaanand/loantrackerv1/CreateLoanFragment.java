@@ -16,6 +16,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
+import com.sayaanand.loantrackerv1.utils.LoggerUtils;
+import com.sayaanand.loantrackerv1.vo.LoanInfo;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -36,6 +40,7 @@ public class CreateLoanFragment extends Fragment implements android.view.View.On
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private LoanTrackerDBHelper dbHelper;
     private  int year;
     private int month;
     private int day;
@@ -95,6 +100,7 @@ public class CreateLoanFragment extends Fragment implements android.view.View.On
         android.widget.Button buttonCalendar = (android.widget.Button)view.findViewById(R.id.button_calendar);
         buttonCalendar.setOnClickListener(this);
 
+        dbHelper = new LoanTrackerDBHelper(getActivity());
         return view;
     }
 
@@ -165,7 +171,33 @@ public class CreateLoanFragment extends Fragment implements android.view.View.On
     }
 
     public void onSave() {
+
         android.util.Log.i("LC", "Inside onSave");
+        EditText name = (EditText)getView().findViewById(R.id.name_ip_val);
+        EditText principal = (EditText)getView().findViewById(R.id.principal_ip_num);
+        EditText interest = (EditText)getView().findViewById(R.id.interst_ip_num);
+        EditText tenor = (EditText)getView().findViewById(R.id.tenor_ip_num);
+        EditText emiDate = (EditText)getView().findViewById(R.id.emidate_ip_val);
+
+
+        Double p = Double.parseDouble(principal.getText().toString());
+        Double n = Double.parseDouble(tenor.getText().toString());
+        Double r = Double.parseDouble(interest.getText().toString());
+
+        int countBefore = dbHelper.numberOfRows();
+        LoanInfo loanInfo = new LoanInfo();
+        loanInfo.setName(name.getText().toString());
+        loanInfo.setType("O");
+        loanInfo.setPrincipal(p);
+        loanInfo.setInterst(r);
+        loanInfo.setTenure(n);
+        loanInfo.setEmiDateStr(emiDate.getText().toString());
+        dbHelper.insert(loanInfo);
+        LoggerUtils.logInfo("Details saved...");
+        int countAfter = dbHelper.numberOfRows();
+
+        LoggerUtils.logInfo("Before:"+countBefore+",After:"+countAfter);
+
     }
 
     public void onClear() {

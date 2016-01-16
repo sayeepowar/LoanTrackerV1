@@ -13,7 +13,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="header_create_new">Create New Loan</string>
 
-
+    <string name="name_ip_text">Loan Name</string>
+    <string name="name_ip_hint">Enter Loan Name</string>
     <string name="edit_message">Enter Principal</string>
     <string name="principal_ip_text">Principal</string>
     <string name="principal_ip_hint">Enter Principal Amount</string>

@@ -55,7 +55,23 @@
                 android:paddingTop="20dp"
                 >
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/name_ip_text"
+                    android:text="@string/name_ip_text"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
+                    />
 
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:ems="15"
+                    android:text="HomeLoan_1"
+                    android:id="@+id/name_ip_val"
+                    android:hint="@string/name_ip_hint"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
