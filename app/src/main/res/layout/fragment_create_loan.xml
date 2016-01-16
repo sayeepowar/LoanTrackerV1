@@ -1,0 +1,183 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    tools:context="com.sayaanand.loantrackerv1.CreateLoanFragment"
+    android:orientation="vertical"
+    android:scrollbars="vertical"
+    android:textAlignment="center"
+    >
+
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_column="1" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/header_create_new"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_column="0" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp">
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:context="com.sayaanand.helloworld.MainActivityFragment"
+                android:paddingTop="20dp"
+                >
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/principal_ip_text"
+                    android:text="@string/principal_ip_text"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
+                    />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="15"
+                    android:text="100000"
+                    android:id="@+id/principal_ip_num"
+                    android:hint="@string/principal_ip_hint"/>
+
+                <TextView
+                    android:id="@+id/tenor_ip_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tenor_ip_text"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
+                    />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="15"
+                    android:text="5"
+                    android:id="@+id/tenor_ip_num"
+                    android:hint="@string/tenor_ip_hint"/>
+
+                <TextView
+                    android:id="@+id/interest_ip_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/interest_ip_text"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
+                    />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="15"
+                    android:id="@+id/interst_ip_num"
+                    android:text="10.10"
+                    android:hint="@string/interest_ip_hint"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <TextView
+                        android:id="@+id/emidate_ip_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/emidate_ip_text"
+                        android:textStyle="bold"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="date"
+                        android:id="@+id/emidate_ip_val"
+                        android:hint="@string/emidate_ip_hint"/>
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/button_calendar"
+                        android:id="@+id/button_calendar"
+                        android:onClick="showDatePickerDialog"
+                        android:clickable="true"
+                        android:textAlignment="center"
+                        style="@style/Base.Widget.AppCompat.Button.Colored" />
+
+                    <DatePicker
+                        android:id="@+id/dpResult"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:alpha="0" />
+
+                </LinearLayout>
+                <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/button_save"
+                        android:id="@+id/button_save"
+                        android:onClick="sendMessage"
+                        android:textColor="#f78d1b"
+                        android:background="#18f9f1"
+                        android:layout_margin="30dp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/button_clear"
+                        android:id="@+id/button_clear"
+                        android:onClick="clearForm"
+                        android:textColor="#f78d1b"
+                        android:background="#18f9f1"
+                        android:layout_margin="30dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </TableRow>
+
+</TableLayout>
