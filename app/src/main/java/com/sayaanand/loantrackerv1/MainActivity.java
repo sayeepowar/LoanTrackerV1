@@ -3,7 +3,6 @@ package com.sayaanand.loantrackerv1;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,14 +16,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
+import com.sayaanand.loantrackerv1.fragments.CreateLoanFragment;
+import com.sayaanand.loantrackerv1.fragments.LoanInfoFragment;
+import com.sayaanand.loantrackerv1.fragments.dummy.DummyContent;
 import com.sayaanand.loantrackerv1.utils.LoggerUtils;
+import com.sayaanand.loantrackerv1.vo.LoanInfo;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements CreateLoanFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements CreateLoanFragment.OnFragmentInteractionListener, LoanInfoFragment.OnListFragmentInteractionListener {
 
     private LoanTrackerDBHelper dbHelper;
 
@@ -91,6 +94,11 @@ public class MainActivity extends AppCompatActivity implements CreateLoanFragmen
 
     @java.lang.Override
     public void onFragmentInteraction(android.net.Uri uri) {
+        android.util.Log.i("LC", "Fragment Interaction");
+    }
+
+    @java.lang.Override
+    public void onListFragmentInteraction(LoanInfo item) {
         android.util.Log.i("LC", "Fragment Interaction");
     }
 }

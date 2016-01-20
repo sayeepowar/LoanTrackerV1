@@ -4,12 +4,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.sayaanand.loantrackerv1.utils.LoggerUtils;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
 
 /**
@@ -35,6 +38,8 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + LoanTrackerDBContract.LoanDetails.TABLE_NAME;
+
+    private static final String SQL_SELECT_ENTRIES = "SELECT * FROM "+ LoanTrackerDBContract.LoanDetails.TABLE_NAME;
 
     public LoanTrackerDBHelper(Context context){
         super(context, DATABASE_NAME, null , DATABASE_VERSION);
@@ -70,5 +75,25 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         int numRows = (int) DatabaseUtils.queryNumEntries(db, LoanTrackerDBContract.LoanDetails.TABLE_NAME);
         return numRows;
+    }
+
+    public List<LoanInfo> getAllLoans() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(SQL_SELECT_ENTRIES, new String[]{});
+        cursor.moveToFirst();
+        List<LoanInfo> loans = new ArrayList<>();
+        do {
+            LoanInfo loanInfo = new LoanInfo();
+            loanInfo.setId(cursor.getInt(0));
+            loanInfo.setName(cursor.getString(1));
+            loanInfo.setType(cursor.getString(2));
+            loanInfo.setPrincipal(cursor.getDouble(3));
+            loanInfo.setInterst(cursor.getDouble(4));
+            loanInfo.setTenure(cursor.getDouble(5));
+            loanInfo.setEmiDateStr(cursor.getString(6));
+            LoggerUtils.logInfo("adding "+loanInfo);
+            loans.add(loanInfo);
+        }while (cursor.moveToNext());
+        return loans;
     }
 }

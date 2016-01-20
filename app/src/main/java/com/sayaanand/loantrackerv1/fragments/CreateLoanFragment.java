@@ -1,9 +1,8 @@
-package com.sayaanand.loantrackerv1;
+package com.sayaanand.loantrackerv1.fragments;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +15,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.sayaanand.loantrackerv1.R;
 import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
 import com.sayaanand.loantrackerv1.utils.LoggerUtils;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;

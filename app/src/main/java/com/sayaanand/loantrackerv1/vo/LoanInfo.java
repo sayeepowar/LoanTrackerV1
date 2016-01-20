@@ -26,6 +26,14 @@ public class LoanInfo {
         this.emiDate = emiDate;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public java.lang.String getName() {
         return name;
     }
@@ -88,4 +96,16 @@ public class LoanInfo {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return "LoanInfo{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", principal=" + principal +
+                ", interst=" + interst +
+                ", tenure=" + tenure +
+                ", emiDate=" + emiDate +
+                '}';
+    }
 }

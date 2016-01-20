@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center"
-    tools:context="com.sayaanand.loantrackerv1.CreateLoanFragment"
+    tools:context=".fragments.CreateLoanFragment"
     android:orientation="vertical"
     android:scrollbars="vertical"
     android:textAlignment="center"
