@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.sayaanand.loantrackerv1.R;
 import com.sayaanand.loantrackerv1.fragments.LoanInfoFragment.OnListFragmentInteractionListener;
-import com.sayaanand.loantrackerv1.fragments.dummy.DummyContent.DummyItem;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
 
 import java.util.List;

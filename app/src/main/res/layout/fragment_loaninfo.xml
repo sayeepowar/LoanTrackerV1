@@ -8,49 +8,49 @@
         android:id="@+id/loan_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_margin="5dp"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/loan_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_margin="5dp"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/loan_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_margin="5dp"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/loan_principal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_margin="5dp"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/loan_interest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_margin="5dp"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/loan_tenure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_margin="5dp"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/loan_emi_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_margin="5dp"
         android:textAppearance="?attr/textAppearanceListItem" />
 
 

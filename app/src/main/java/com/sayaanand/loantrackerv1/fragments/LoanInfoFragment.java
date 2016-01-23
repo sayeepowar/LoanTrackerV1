@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 
 import com.sayaanand.loantrackerv1.R;
 import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
-import com.sayaanand.loantrackerv1.fragments.dummy.DummyContent;
-import com.sayaanand.loantrackerv1.fragments.dummy.DummyContent.DummyItem;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
 
 import java.util.List;

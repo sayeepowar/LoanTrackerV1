@@ -80,8 +80,12 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
     public List<LoanInfo> getAllLoans() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(SQL_SELECT_ENTRIES, new String[]{});
-        cursor.moveToFirst();
+
         List<LoanInfo> loans = new ArrayList<>();
+        if (!cursor.moveToFirst()) {
+            return loans;
+        }
+
         do {
             LoanInfo loanInfo = new LoanInfo();
             loanInfo.setId(cursor.getInt(0));

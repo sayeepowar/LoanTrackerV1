@@ -3,6 +3,7 @@ package com.sayaanand.loantrackerv1;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
 import com.sayaanand.loantrackerv1.fragments.CreateLoanFragment;
 import com.sayaanand.loantrackerv1.fragments.LoanInfoFragment;
-import com.sayaanand.loantrackerv1.fragments.dummy.DummyContent;
+import com.sayaanand.loantrackerv1.fragments.MainActivityFragment;
 import com.sayaanand.loantrackerv1.utils.LoggerUtils;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
 
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements CreateLoanFragmen
                 loadCreateLoanForm();
                 return true;
             case R.id.action_show_loans:
+                loadShowMyLoans();
                 return true;
             case R.id.action_show_alerts:
                 return true;
@@ -86,7 +88,19 @@ public class MainActivity extends AppCompatActivity implements CreateLoanFragmen
         Bundle args = new Bundle();
         createLoanFragment.setArguments(args);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment, createLoanFragment);
+        transaction.replace(R.id.fragment_container, createLoanFragment);
+        transaction.addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    private void loadShowMyLoans() {
+        LoggerUtils.logInfo("Show my loans");
+        MainActivityFragment mainActivityFragment = new MainActivityFragment();
+        Bundle args = new Bundle();
+        mainActivityFragment.setArguments(args);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, mainActivityFragment);
         transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();
