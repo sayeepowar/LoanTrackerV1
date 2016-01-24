@@ -44,7 +44,7 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
     private static final String SQL_SELECT_ENTRY_WHERE = " WHERE " +LoanTrackerDBContract.LoanDetails.COLUMN_NAME_ID +" = ?";
 
     public LoanTrackerDBHelper(Context context){
-        super(context, DATABASE_NAME, null , DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     public void onCreate(SQLiteDatabase db) {
@@ -53,24 +53,25 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        db.execSQL(SQL_DELETE_ENTRIES);
-        onCreate(db);
+        //db.execSQL(SQL_DELETE_ENTRIES);
+        //onCreate(db);
     }
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        onUpgrade(db, oldVersion, newVersion);
+        //onUpgrade(db, oldVersion, newVersion);
     }
 
     public boolean insert(LoanInfo loanInfo) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_NAME, loanInfo.getName());
-        contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_TYPE, loanInfo.getType());
-        contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_PRINCIPAL, loanInfo.getPrincipal());
-        contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_INTEREST, loanInfo.getInterst());
-        contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_TENURE, loanInfo.getTenure());
-        contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_EMI_DATE, loanInfo.getEmiDateStr());
-        db.insert(LoanTrackerDBContract.LoanDetails.TABLE_NAME, null, contentValues);
-        return true;
+        try (SQLiteDatabase db = this.getWritableDatabase()) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_NAME, loanInfo.getName());
+            contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_TYPE, loanInfo.getType());
+            contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_PRINCIPAL, loanInfo.getPrincipal());
+            contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_INTEREST, loanInfo.getInterst());
+            contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_TENURE, loanInfo.getTenure());
+            contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_EMI_DATE, loanInfo.getEmiDateStr());
+            db.insert(LoanTrackerDBContract.LoanDetails.TABLE_NAME, null, contentValues);
+            return true;
+        }
     }
 
     public int numberOfRows(){
@@ -80,20 +81,21 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
     }
 
     public List<LoanInfo> getAllLoans() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(SQL_SELECT_ENTRIES, new String[]{});
+        try (SQLiteDatabase db = this.getReadableDatabase()) {
+            Cursor cursor = db.rawQuery(SQL_SELECT_ENTRIES, new String[]{});
 
-        List<LoanInfo> loans = new ArrayList<>();
-        if (!cursor.moveToFirst()) {
+            List<LoanInfo> loans = new ArrayList<>();
+            if (!cursor.moveToFirst()) {
+                return loans;
+            }
+
+            do {
+                LoanInfo loanInfo = getLoanInfo(cursor);
+                LoggerUtils.logInfo("adding " + loanInfo);
+                loans.add(loanInfo);
+            } while (cursor.moveToNext());
             return loans;
         }
-
-        do {
-            LoanInfo loanInfo = getLoanInfo(cursor);
-            LoggerUtils.logInfo("adding "+loanInfo);
-            loans.add(loanInfo);
-        }while (cursor.moveToNext());
-        return loans;
     }
 
     @NonNull
@@ -110,12 +112,14 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
     }
 
     public LoanInfo select(Integer loanId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(SQL_SELECT_ENTRIES+SQL_SELECT_ENTRY_WHERE, new String[]{loanId.toString()});
-        if (!cursor.moveToFirst()) {
-            return null;
+        try (SQLiteDatabase db = this.getReadableDatabase()) {
+            Cursor cursor = db.rawQuery(SQL_SELECT_ENTRIES + SQL_SELECT_ENTRY_WHERE, new String[]{loanId.toString()});
+            if (!cursor.moveToFirst()) {
+                return null;
+            }
+            LoanInfo loanInfo = getLoanInfo(cursor);
+            db.close();
+            return loanInfo;
         }
-        LoanInfo loanInfo = getLoanInfo(cursor);
-        return loanInfo;
     }
 }
