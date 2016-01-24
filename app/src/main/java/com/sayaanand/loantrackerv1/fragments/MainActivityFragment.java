@@ -98,7 +98,12 @@ public class MainActivityFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     LoggerUtils.logInfo("Clicked the row");
-
+                    LoanDetailsFragment loanDetailsFragment = LoanDetailsFragment.newInstance(currentLoanInfo.getId(), null);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, loanDetailsFragment);
+                    transaction.addToBackStack(null);
+                    // Commit the transaction
+                    transaction.commit();
                 }
             });
             tr.setLayoutParams(new LayoutParams(

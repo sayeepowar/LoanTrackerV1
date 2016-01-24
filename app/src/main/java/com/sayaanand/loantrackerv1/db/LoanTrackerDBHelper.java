@@ -11,6 +11,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import com.sayaanand.loantrackerv1.utils.LoggerUtils;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
@@ -40,6 +41,7 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + LoanTrackerDBContract.LoanDetails.TABLE_NAME;
 
     private static final String SQL_SELECT_ENTRIES = "SELECT * FROM "+ LoanTrackerDBContract.LoanDetails.TABLE_NAME;
+    private static final String SQL_SELECT_ENTRY_WHERE = " WHERE " +LoanTrackerDBContract.LoanDetails.COLUMN_NAME_ID +" = ?";
 
     public LoanTrackerDBHelper(Context context){
         super(context, DATABASE_NAME, null , DATABASE_VERSION);
@@ -87,17 +89,33 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
         }
 
         do {
-            LoanInfo loanInfo = new LoanInfo();
-            loanInfo.setId(cursor.getInt(0));
-            loanInfo.setName(cursor.getString(1));
-            loanInfo.setType(cursor.getString(2));
-            loanInfo.setPrincipal(cursor.getDouble(3));
-            loanInfo.setInterst(cursor.getDouble(4));
-            loanInfo.setTenure(cursor.getDouble(5));
-            loanInfo.setEmiDateStr(cursor.getString(6));
+            LoanInfo loanInfo = getLoanInfo(cursor);
             LoggerUtils.logInfo("adding "+loanInfo);
             loans.add(loanInfo);
         }while (cursor.moveToNext());
         return loans;
+    }
+
+    @NonNull
+    private LoanInfo getLoanInfo(Cursor cursor) {
+        LoanInfo loanInfo = new LoanInfo();
+        loanInfo.setId(cursor.getInt(0));
+        loanInfo.setName(cursor.getString(1));
+        loanInfo.setType(cursor.getString(2));
+        loanInfo.setPrincipal(cursor.getDouble(3));
+        loanInfo.setInterst(cursor.getDouble(4));
+        loanInfo.setTenure(cursor.getDouble(5));
+        loanInfo.setEmiDateStr(cursor.getString(6));
+        return loanInfo;
+    }
+
+    public LoanInfo select(Integer loanId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(SQL_SELECT_ENTRIES+SQL_SELECT_ENTRY_WHERE, new String[]{loanId.toString()});
+        if (!cursor.moveToFirst()) {
+            return null;
+        }
+        LoanInfo loanInfo = getLoanInfo(cursor);
+        return loanInfo;
     }
 }
