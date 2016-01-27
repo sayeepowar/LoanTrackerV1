@@ -225,7 +225,7 @@ public class CreateLoanFragment extends Fragment implements android.view.View.On
         dpResult.init(year, month, day, null);
     }
 
-    class SelectDateFragment extends DialogFragment implements android.app.DatePickerDialog.OnDateSetListener {
+    public class SelectDateFragment extends DialogFragment implements android.app.DatePickerDialog.OnDateSetListener {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {

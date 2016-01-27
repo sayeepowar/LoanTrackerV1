@@ -1,10 +1,11 @@
 package com.sayaanand.loantrackerv1.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 /**
  * Created by Nandkishore.Powar on 16/01/2016.
  */
-public class LoanInfo {
+public class LoanInfo implements Serializable{
 
     private static java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd-MMM-yyyy");
     private int id;
