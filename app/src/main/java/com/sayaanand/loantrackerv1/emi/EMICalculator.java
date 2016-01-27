@@ -55,6 +55,7 @@ public class EMICalculator implements ICalculator {
         double outstaningAmount = principal;
         double monthlyRest = interest / (12 * 100);
 
+        double tillDatePrincipal=0.0,tillDateInterest=0.0,tillDateTotal=0.0;
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
         Double emi = calculate(principal, interest, tenor);
@@ -70,6 +71,15 @@ public class EMICalculator implements ICalculator {
                 outstaningAmount = outstaningAmount - emiDetails.getPrincipal();
                 //advance date
                 c.add(Calendar.MONTH, 1);
+
+                tillDatePrincipal += emiDetails.getPrincipal();
+                emiDetails.setTillDatePrincipal(tillDatePrincipal);
+
+                tillDateInterest += emiDetails.getInterest();
+                emiDetails.setTillDateInterest(tillDateInterest);
+
+                tillDateTotal += emiDetails.getTotal();
+                emiDetails.setTillDateTotal(tillDateTotal);
             }
         }
         return results;

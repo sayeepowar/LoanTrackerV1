@@ -27,6 +27,7 @@ import com.sayaanand.loantrackerv1.emi.EMICalculator;
 import com.sayaanand.loantrackerv1.emi.ICalculator;
 import com.sayaanand.loantrackerv1.emi.vo.EMIDetails;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
+import com.sayaanand.loantrackerv1.vo.PrePaymentInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class LoanDetailsFragment extends Fragment {
     private String mParam2;
     private static LoanInfo loanInfo;
     private static List<EMIDetails> emiDetails;
+    private static List<PrePaymentInfo> prePayments;
 
     private LoanDetailsPagerAdapter loanDetailsPagerAdapter;
 
@@ -101,6 +103,7 @@ public class LoanDetailsFragment extends Fragment {
 
         dbHelper = new LoanTrackerDBHelper(getActivity());
         loanInfo = dbHelper.select(loanId);
+        prePayments = dbHelper.selectPrePayments(loanId);
         emiDetails = calculator.getEMIDetails(loanInfo.getPrincipal()
                 , loanInfo.getInterst()
                 , loanInfo.getTenure()
@@ -158,30 +161,39 @@ public class LoanDetailsFragment extends Fragment {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0:
+                case 3:
                     Fragment lineChartFragment = new LineChartFragment();
                     Bundle lineArgs = new Bundle();
                     lineChartFragment.setArguments(lineArgs);
                     return lineChartFragment;
-                case 1:
+                case 2:
                     Fragment barChartFragment = new BarChartFragment();
                     Bundle barArgs = new Bundle();
                     barChartFragment.setArguments(barArgs);
                     return barChartFragment;
+                case 1:
+                    Fragment emiListFragment = CashFlowFragment.newInstance(emiDetails, null);
+                    return emiListFragment;
+                case 0 :
+                    Fragment landingFragment = LoanInfoLandingFragment.newInstance(loanInfo, prePayments);
+                    return landingFragment;
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0: return "Line Chart";
-                case 1: return "Bar Chart";
+                case 0: return "Loan Details";
+                case 1: return "Cash Flow";
+                case 2: return "Bar Chart";
+                case 3: return "Line Chart";
+
             }
             return "OBJECT " + (position + 1);
         }

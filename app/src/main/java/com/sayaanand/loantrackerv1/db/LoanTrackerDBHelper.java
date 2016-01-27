@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 
 import com.sayaanand.loantrackerv1.utils.LoggerUtils;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
+import com.sayaanand.loantrackerv1.vo.PrePaymentInfo;
 
 /**
  * Created by Nandkishore.Powar on 16/01/2016.
@@ -37,11 +38,23 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
                     LoanTrackerDBContract.LoanDetails.COLUMN_NAME_TENURE + DOUBLE_TYPE + COMMA_SEP +
                     LoanTrackerDBContract.LoanDetails.COLUMN_NAME_EMI_DATE + TEXT_TYPE +  " )";
 
+    public static final String SQL_CREATE_PREPAYMENT =
+            "CREATE TABLE " + LoanTrackerDBContract.EMIPrepayments.TABLE_NAME + " (" +
+                    LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_ID+ " INTEGER PRIMARY KEY" + COMMA_SEP +
+                    LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_LOAN_ID + " INTEGER " + COMMA_SEP +
+                    LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_AMOUNT + DOUBLE_TYPE + COMMA_SEP +
+                    LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_DATE + TEXT_TYPE + COMMA_SEP +
+                    LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_COMMENTS + TEXT_TYPE
+                    + " ) ";
+
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + LoanTrackerDBContract.LoanDetails.TABLE_NAME;
 
     private static final String SQL_SELECT_ENTRIES = "SELECT * FROM "+ LoanTrackerDBContract.LoanDetails.TABLE_NAME;
     private static final String SQL_SELECT_ENTRY_WHERE = " WHERE " +LoanTrackerDBContract.LoanDetails.COLUMN_NAME_ID +" = ?";
+
+    private static final String SQL_SELECT_PREPAYMENT = "SELECT * FROM "+ LoanTrackerDBContract.EMIPrepayments.TABLE_NAME;
+    private static final String SQL_SELECT_PREPAYMENT_WHERE = " WHERE " +LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_LOAN_ID +" = ?";
 
     public LoanTrackerDBHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -49,15 +62,16 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_PREPAYMENT);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        //db.execSQL(SQL_DELETE_ENTRIES);
-        //onCreate(db);
+        db.execSQL(SQL_DELETE_ENTRIES);
+        onCreate(db);
     }
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //onUpgrade(db, oldVersion, newVersion);
+        onUpgrade(db, oldVersion, newVersion);
     }
 
     public boolean insert(LoanInfo loanInfo) {
@@ -72,6 +86,24 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
             db.insert(LoanTrackerDBContract.LoanDetails.TABLE_NAME, null, contentValues);
             return true;
         }
+    }
+
+    public boolean insert(PrePaymentInfo prepaymentInfo) {
+        try (SQLiteDatabase db = this.getWritableDatabase()) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_LOAN_ID, prepaymentInfo.getLoanId());
+            contentValues.put(LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_AMOUNT, prepaymentInfo.getAmount());
+            contentValues.put(LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_DATE, prepaymentInfo.getDateStr());
+            contentValues.put(LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_COMMENTS, prepaymentInfo.getComments());
+            db.insert(LoanTrackerDBContract.EMIPrepayments.TABLE_NAME, null, contentValues);
+            return true;
+        }
+    }
+
+    public int numberOfRowsPrePayment(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, LoanTrackerDBContract.EMIPrepayments.TABLE_NAME);
+        return numRows;
     }
 
     public int numberOfRows(){
@@ -118,8 +150,39 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
                 return null;
             }
             LoanInfo loanInfo = getLoanInfo(cursor);
-            db.close();
             return loanInfo;
+        }
+    }
+
+    public List<PrePaymentInfo> selectPrePayments(Integer loanId) {
+
+        try (SQLiteDatabase db = this.getReadableDatabase()){
+            Cursor cursor = db.rawQuery(SQL_SELECT_PREPAYMENT + SQL_SELECT_PREPAYMENT_WHERE, new String[]{loanId.toString()});
+            List<PrePaymentInfo> list = new ArrayList<>();
+            if (!cursor.moveToFirst()) {
+                for(int i=0;i<20;i++) {
+                    PrePaymentInfo prePaymentInfo = new PrePaymentInfo();
+                    prePaymentInfo.setId(1);
+                    prePaymentInfo.setLoanId(1);
+                    prePaymentInfo.setAmount(10000.0f);
+                    prePaymentInfo.setDateStr("10-JAN-2016");
+                    prePaymentInfo.setComments("Dummy Prepayment");
+                    LoggerUtils.logInfo("adding " + prePaymentInfo);
+                    list.add(prePaymentInfo);
+                }
+                return list;
+            }
+            do {
+                PrePaymentInfo prePaymentInfo = new PrePaymentInfo();
+                prePaymentInfo.setId(cursor.getInt(0));
+                prePaymentInfo.setLoanId(cursor.getInt(1));
+                prePaymentInfo.setAmount(cursor.getFloat(2));
+                prePaymentInfo.setDateStr(cursor.getString(3));
+                prePaymentInfo.setComments(cursor.getString(4));
+                LoggerUtils.logInfo("adding " + prePaymentInfo);
+                list.add(prePaymentInfo);
+            } while (cursor.moveToNext());
+            return list;
         }
     }
 }

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="Edit"
+        android:id="@+id/button"
+        android:layout_gravity="right" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Name"
+                android:gravity="right"
+                android:paddingRight="5dp"
+                android:textStyle="bold"
+                android:textSize="14dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text=""
+                android:layout_column="2"
+                android:id="@+id/loan_text_info_name"
+                android:textStyle="bold"
+                android:textSize="14dp" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Principal"
+                android:paddingRight="5dp"
+                android:gravity="right"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:ems="10"
+                android:id="@+id/loan_text_info_principal"
+                android:layout_column="2"
+                android:editable="false"
+                android:textStyle="normal"
+                android:textSize="12dp"
+                android:enabled="false" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Interest"
+                android:gravity="right"
+                android:paddingRight="5dp"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:ems="10"
+                android:id="@+id/loan_text_info_interest"
+                android:layout_column="2"
+                android:editable="false"
+                android:textSize="12dp"
+                android:textStyle="normal" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Tenure"
+                android:gravity="right"
+                android:paddingRight="5dp"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:ems="10"
+                android:id="@+id/loan_text_info_tenure"
+                android:layout_column="2"
+                android:editable="false"
+                android:textSize="12dp"
+                android:textStyle="normal" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Loan Start Date"
+                android:gravity="right"
+                android:paddingRight="5dp"
+                android:textAlignment="gravity"
+                android:paddingTop="10dp"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2">
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/loan_text_info_first_emit_date"
+
+                    android:editable="false"
+                    android:hint="Enter Date"
+                    android:inputType="date"
+                    android:enabled="true"
+                    android:textSize="12dp" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="Select Date"
+                    android:id="@+id/button2"
+
+                    android:nestedScrollingEnabled="false"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+               <!-- <DatePicker
+                    android:id="@+id/dpResult"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:alpha="0" />-->
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="@string/button_save"
+                android:id="@+id/button_save"
+
+                android:textColor="#f78d1b"
+                android:background="#18f9f1"
+                android:textStyle="bold"
+                android:layout_marginLeft="30dp"
+                android:layout_gravity="center" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="@string/button_clear"
+                android:id="@+id/button_clear"
+
+                android:layout_column="2"
+                android:textColor="#f78d1b"
+                android:background="#18f9f1"
+                android:textStyle="bold"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="center" />
+
+        </TableRow>
+    </TableLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:minHeight="300dp">
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/horizontalScrollView"
+            android:background="#f3a4a4">
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:context=".fragments.PrePayments">
+                <include layout="@layout/emi_prepayments_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp" />
+                <ListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@android:id/list" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
+</FrameLayout>
