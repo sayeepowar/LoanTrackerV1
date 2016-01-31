@@ -170,6 +170,7 @@ public class LoanDetailsFragment extends Fragment {
         public void onUpdate() {
             LoggerUtils.logInfo("On Update callback....");
             loadLoanDetails();
+            titles.remove(LoanInfoLandingFragment.INDEX);
             titles.remove(LoanRepaymentsFragment.INDEX);
             titles.remove(CashFlowFragment.INDEX);
             titles.remove(BarChartFragment.INDEX);

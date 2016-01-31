@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.sayaanand.loantrackerv1.R;
 import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
 import com.sayaanand.loantrackerv1.utils.LoggerUtils;
+import com.sayaanand.loantrackerv1.utils.Utility;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
 
 import java.text.DecimalFormat;
@@ -195,9 +196,9 @@ public class CreateLoanFragment extends Fragment implements android.view.View.On
         dbHelper.insert(loanInfo);
         LoggerUtils.logInfo("Details saved...");
         int countAfter = dbHelper.numberOfRows();
-
+        Utility.showToast(getActivity(), "Loan Details created sucessfully!");
         LoggerUtils.logInfo("Before:"+countBefore+",After:"+countAfter);
-
+        mListener.onFragmentInteraction(Uri.EMPTY);
     }
 
     public void onClear() {

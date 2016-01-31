@@ -124,5 +124,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
         android.util.Log.i("LC", "Fragment Interaction from Loan Details");
+        loadShowMyLoans();
     }
 }

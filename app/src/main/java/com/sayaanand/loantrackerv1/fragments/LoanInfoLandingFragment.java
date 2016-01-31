@@ -18,10 +18,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sayaanand.loantrackerv1.R;
 import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
 import com.sayaanand.loantrackerv1.utils.LoggerUtils;
+import com.sayaanand.loantrackerv1.utils.Utility;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
 import com.sayaanand.loantrackerv1.vo.PrePaymentInfo;
 
@@ -218,6 +220,7 @@ public class LoanInfoLandingFragment extends Fragment implements View.OnClickLis
         int countAfter = dbHelper.numberOfRows();
 
         LoggerUtils.logInfo("Before:"+countBefore+",After:"+countAfter);
+        Utility.showToast(getActivity(), "Loan Details updated sucessfully!");
 
         this.loanInfoUpdateListener.onUpdate();
 
