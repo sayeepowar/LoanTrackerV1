@@ -56,6 +56,7 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
 
 
     private static final String SQL_SELECT_PREPAYMENT = "SELECT * FROM "+ LoanTrackerDBContract.EMIPrepayments.TABLE_NAME;
+    private static final String SQL_SELECT_PREPAYMENT_ID_CLAUSE = LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_ID +" = ?";
     private static final String SQL_SELECT_PREPAYMENT_WHERE = " WHERE " +LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_LOAN_ID +" = ?";
 
     public LoanTrackerDBHelper(Context context){
@@ -100,7 +101,7 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
             contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_TENURE, loanInfo.getTenure());
             contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_EMI_DATE, loanInfo.getEmiDateStr());
             int cnt = db.update(LoanTrackerDBContract.LoanDetails.TABLE_NAME, contentValues, SQL_SELECT_ENTRY_ID_CLAUSE,new String[]{String.valueOf(loanInfo.getId())} );
-            LoggerUtils.logInfo("Count Updated:"+cnt);
+            LoggerUtils.logInfo("Count Updated:" + cnt);
             return true;
         }
     }
@@ -140,7 +141,7 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
 
             do {
                 LoanInfo loanInfo = getLoanInfo(cursor);
-                LoggerUtils.logInfo("adding " + loanInfo);
+                LoggerUtils.logInfo("got " + loanInfo);
                 loans.add(loanInfo);
             } while (cursor.moveToNext());
             return loans;
@@ -177,16 +178,6 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(SQL_SELECT_PREPAYMENT + SQL_SELECT_PREPAYMENT_WHERE, new String[]{loanId.toString()});
             List<PrePaymentInfo> list = new ArrayList<>();
             if (!cursor.moveToFirst()) {
-                for(int i=0;i<20;i++) {
-                    PrePaymentInfo prePaymentInfo = new PrePaymentInfo();
-                    prePaymentInfo.setId(1);
-                    prePaymentInfo.setLoanId(1);
-                    prePaymentInfo.setAmount(10000.0f);
-                    prePaymentInfo.setDateStr("10-JAN-2016");
-                    prePaymentInfo.setComments("Dummy Prepayment");
-                    LoggerUtils.logInfo("adding " + prePaymentInfo);
-                    list.add(prePaymentInfo);
-                }
                 return list;
             }
             do {
@@ -196,10 +187,18 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
                 prePaymentInfo.setAmount(cursor.getFloat(2));
                 prePaymentInfo.setDateStr(cursor.getString(3));
                 prePaymentInfo.setComments(cursor.getString(4));
-                LoggerUtils.logInfo("adding " + prePaymentInfo);
+                LoggerUtils.logInfo("got " + prePaymentInfo);
                 list.add(prePaymentInfo);
             } while (cursor.moveToNext());
             return list;
         }
     }
+
+    public void delete(PrePaymentInfo prePaymentInfo) {
+        try (SQLiteDatabase db = this.getWritableDatabase()) {
+            int rowCountUpdated = db.delete(LoanTrackerDBContract.EMIPrepayments.TABLE_NAME, SQL_SELECT_PREPAYMENT_ID_CLAUSE, new String[]{String.valueOf(prePaymentInfo.getId())});
+            LoggerUtils.logInfo("Rows deleted:"+rowCountUpdated);
+        }
+    }
+
 }

@@ -14,14 +14,26 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
-    <Button
+        <Space
+            android:layout_width="20px"
+            android:layout_height="20px" />
+
+        <ImageButton
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:text="Edit"
         android:id="@+id/button"
-        android:layout_gravity="right" />
+        android:layout_gravity="right"
+        android:contentDescription="Edit Loan Details"
+        android:src="@drawable/img_edit"
+            android:layout_marginRight="30dp"
+            android:background="#ffffff" />
 
-    <TableLayout
+        <Space
+            android:layout_width="20px"
+            android:layout_height="20px" />
+
+        <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -38,7 +50,7 @@
                 android:paddingRight="5dp"
                 android:textStyle="bold"
                 android:textSize="14dp" />
-            <TextView
+            <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
@@ -46,7 +58,8 @@
                 android:layout_column="2"
                 android:id="@+id/loan_text_info_name"
                 android:textStyle="bold"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:enabled="false" />
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
@@ -68,7 +81,6 @@
                 android:ems="10"
                 android:id="@+id/loan_text_info_principal"
                 android:layout_column="2"
-                android:editable="false"
                 android:textStyle="normal"
                 android:textSize="12dp"
                 android:enabled="false" />
@@ -93,7 +105,7 @@
                 android:ems="10"
                 android:id="@+id/loan_text_info_interest"
                 android:layout_column="2"
-                android:editable="false"
+                android:enabled="false"
                 android:textSize="12dp"
                 android:textStyle="normal" />
         </TableRow>
@@ -117,7 +129,7 @@
                 android:ems="10"
                 android:id="@+id/loan_text_info_tenure"
                 android:layout_column="2"
-                android:editable="false"
+                android:enabled="false"
                 android:textSize="12dp"
                 android:textStyle="normal" />
         </TableRow>
@@ -151,7 +163,7 @@
                     android:editable="false"
                     android:hint="Enter Date"
                     android:inputType="date"
-                    android:enabled="true"
+                    android:enabled="false"
                     android:textSize="12dp" />
 
                 <Button
@@ -160,6 +172,7 @@
                     android:layout_height="40dp"
                     android:text="Select Date"
                     android:id="@+id/button2"
+                    android:enabled="false"
 
                     android:nestedScrollingEnabled="false"
                     android:textSize="14dp"
@@ -174,7 +187,21 @@
 
         </TableRow>
 
-        <TableRow
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="50px" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_column="2"
+                    android:layout_height="50px" />
+            </TableRow>
+
+            <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <Button
@@ -186,6 +213,7 @@
                 android:textColor="#f78d1b"
                 android:background="#18f9f1"
                 android:textStyle="bold"
+                android:enabled="false"
                 android:layout_marginLeft="30dp"
                 android:layout_gravity="center" />
 
@@ -199,6 +227,7 @@
                 android:textColor="#f78d1b"
                 android:background="#18f9f1"
                 android:textStyle="bold"
+                android:enabled="false"
                 android:layout_marginRight="30dp"
                 android:layout_gravity="center" />
 

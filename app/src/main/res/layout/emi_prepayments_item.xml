@@ -23,16 +23,18 @@
         android:padding="5dp" />
 
     <TextView
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
+        android:text=""
         android:id="@+id/text_prepayment_comments"
         android:padding="5dp" />
 
     <ImageButton
-        android:layout_width="wrap_content"
+        android:layout_width="55dp"
         android:layout_height="wrap_content"
-        android:id="@+id/imageButton" />
+        android:id="@+id/button_delete_prepayment"
+        android:src="@drawable/img_delete"
+        android:background="#ffffff" />
 
 </LinearLayout>

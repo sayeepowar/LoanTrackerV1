@@ -67,4 +67,15 @@ public class PrePaymentInfo implements Serializable {
     public void setComments(String comments) {
         this.comments = comments;
     }
+
+    @Override
+    public String toString() {
+        return "PrePaymentInfo{" +
+                "id=" + id +
+                ", loanId=" + loanId +
+                ", amount=" + amount +
+                ", date=" + date +
+                ", comments='" + comments + '\'' +
+                '}';
+    }
 }

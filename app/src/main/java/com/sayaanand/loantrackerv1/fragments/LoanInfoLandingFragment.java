@@ -9,10 +9,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.AppCompatImageButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -100,7 +102,7 @@ public class LoanInfoLandingFragment extends Fragment implements View.OnClickLis
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_loan_landing, container, false);
         dbHelper = new LoanTrackerDBHelper(getActivity());
-        android.widget.Button buttonEdite = (android.widget.Button)view.findViewById(R.id.button);
+        AppCompatImageButton buttonEdite = (AppCompatImageButton)view.findViewById(R.id.button);
         buttonEdite.setOnClickListener(this);
 
         android.widget.Button buttonSave = (android.widget.Button)view.findViewById(R.id.button_save);
@@ -120,7 +122,7 @@ public class LoanInfoLandingFragment extends Fragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView textViewName = (TextView)view.findViewById(R.id.loan_text_info_name);
+        EditText textViewName = (EditText)view.findViewById(R.id.loan_text_info_name);
         textViewName.setText(loanInfo.getName());
         EditText editTextPrincipal = (EditText)view.findViewById(R.id.loan_text_info_principal);
         editTextPrincipal.setText(loanInfo.getPrincipal().toString());
@@ -156,8 +158,32 @@ public class LoanInfoLandingFragment extends Fragment implements View.OnClickLis
             case R.id.button2:
                 showDatePickerDialog();
                 break;
+            case R.id.button:
+                enableForEdit();
+                break;
 
         }
+    }
+
+    public void enableForEdit() {
+        EditText textViewName = (EditText)getView().findViewById(R.id.loan_text_info_name);
+        EditText editTextPrincipal = (EditText)getView().findViewById(R.id.loan_text_info_principal);
+        EditText editTextInterest = (EditText)getView().findViewById(R.id.loan_text_info_interest);
+        EditText editTextTenure = (EditText)getView().findViewById(R.id.loan_text_info_tenure);
+        EditText editTextDate = (EditText)getView().findViewById(R.id.loan_text_info_first_emit_date);
+        Button buttonSave = (Button)getView().findViewById(R.id.button_save);
+        Button buttonReset = (Button)getView().findViewById(R.id.button_reset);
+        Button buttonCalendar = (Button)getView().findViewById(R.id.button2);
+
+        textViewName.setEnabled(true);
+        editTextPrincipal.setEnabled(true);
+        editTextInterest.setEnabled(true);
+        editTextTenure.setEnabled(true);
+        editTextDate.setEnabled(true);
+        buttonSave.setEnabled(true);
+        buttonReset.setEnabled(true);
+        buttonCalendar.setEnabled(true);
+
     }
 
     public void showDatePickerDialog() {
@@ -168,7 +194,7 @@ public class LoanInfoLandingFragment extends Fragment implements View.OnClickLis
 
     public void onSave() {
         android.util.Log.i("LC", "Inside onSave");
-        TextView textViewName = (TextView)getView().findViewById(R.id.loan_text_info_name);
+        EditText textViewName = (EditText)getView().findViewById(R.id.loan_text_info_name);
         EditText editTextPrincipal = (EditText)getView().findViewById(R.id.loan_text_info_principal);
         EditText editTextInterest = (EditText)getView().findViewById(R.id.loan_text_info_interest);
         EditText editTextTenure = (EditText)getView().findViewById(R.id.loan_text_info_tenure);
@@ -201,7 +227,7 @@ public class LoanInfoLandingFragment extends Fragment implements View.OnClickLis
     public void onReset() {
         android.util.Log.i("LC", "Inside onReset");
 
-        TextView textViewName = (TextView)getView().findViewById(R.id.loan_text_info_name);
+        EditText textViewName = (EditText)getView().findViewById(R.id.loan_text_info_name);
         textViewName.setText(loanInfo.getName());
         EditText editTextPrincipal = (EditText)getView().findViewById(R.id.loan_text_info_principal);
         editTextPrincipal.setText(loanInfo.getPrincipal().toString());
@@ -211,6 +237,19 @@ public class LoanInfoLandingFragment extends Fragment implements View.OnClickLis
         editTextTenure.setText(loanInfo.getTenure().toString());
         EditText editTextDate = (EditText)getView().findViewById(R.id.loan_text_info_first_emit_date);
         editTextDate.setText(loanInfo.getEmiDateStr());
+
+        textViewName.setEnabled(false);
+        editTextPrincipal.setEnabled(false);
+        editTextInterest.setEnabled(false);
+        editTextTenure.setEnabled(false);
+        editTextDate.setEnabled(false);
+
+        Button buttonSave = (Button)getView().findViewById(R.id.button_save);
+        Button buttonReset = (Button)getView().findViewById(R.id.button_reset);
+        Button buttonCalendar = (Button)getView().findViewById(R.id.button2);
+        buttonSave.setEnabled(false);
+        buttonReset.setEnabled(false);
+        buttonCalendar.setEnabled(false);
     }
 
 

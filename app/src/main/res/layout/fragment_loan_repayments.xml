@@ -10,13 +10,14 @@
         android:layout_width="20px"
         android:layout_height="20px" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Record"
         android:id="@+id/button_add_prepayment"
-        android:layout_gravity="right" />
+        android:src="@drawable/img_add"
+        android:background="#ffffff"
+        android:layout_gravity="right"
+        android:layout_marginRight="30dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

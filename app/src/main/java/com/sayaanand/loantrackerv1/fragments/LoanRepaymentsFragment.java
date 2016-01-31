@@ -8,6 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.AppCompatImageButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.sayaanand.loantrackerv1.R;
 import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
+import com.sayaanand.loantrackerv1.utils.LoggerUtils;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
 import com.sayaanand.loantrackerv1.vo.PrePaymentInfo;
 
@@ -101,7 +103,8 @@ public class LoanRepaymentsFragment extends ListFragment implements IPagerFragme
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = (View)inflater.inflate(R.layout.fragment_loan_repayments, container, false);
-        Button button_add_prepayment = (Button)view.findViewById(R.id.button_add_prepayment);
+        dbHelper = new LoanTrackerDBHelper(getActivity());
+        AppCompatImageButton button_add_prepayment = (AppCompatImageButton)view.findViewById(R.id.button_add_prepayment);
         button_add_prepayment.setOnClickListener(this);
         return view;
     }
@@ -122,7 +125,7 @@ public class LoanRepaymentsFragment extends ListFragment implements IPagerFragme
         newFragment.show(transaction, "AddLoanRepayment");
     }
 
-    public static class PrepaymentsAdapter extends BaseAdapter {
+    public class PrepaymentsAdapter extends BaseAdapter {
         private final Context context;
         private final List<PrePaymentInfo> values;
 
@@ -154,15 +157,18 @@ public class LoanRepaymentsFragment extends ListFragment implements IPagerFragme
             TextView mDateView;
             TextView mAmountView;
             TextView mCommentsView;
+            PrePaymentInfo mItem = values.get(position);
 
             mDateView = (TextView) view.findViewById(R.id.text_prepayment_date);
             mAmountView = (TextView) view.findViewById(R.id.text_prepayment_amount);
             mCommentsView = (TextView) view.findViewById(R.id.text_prepayment_comments);
+            AppCompatImageButton button_delete = (AppCompatImageButton) view.findViewById(R.id.button_delete_prepayment);
+            button_delete.setOnClickListener(new ActionListener(mItem));
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
             DecimalFormat df = new DecimalFormat("#,###.##");
 
-            PrePaymentInfo mItem = values.get(position);
+
             mDateView.setText(sdf.format(mItem.getDate()));
             mAmountView.setText(df.format(mItem.getAmount()).toString());
             mCommentsView.setText(mItem.getComments());
@@ -170,4 +176,18 @@ public class LoanRepaymentsFragment extends ListFragment implements IPagerFragme
         }
     }
 
+    public class ActionListener implements View.OnClickListener {
+        PrePaymentInfo prePaymentInfo;
+        public ActionListener(PrePaymentInfo prePaymentInfo) {
+            this.prePaymentInfo = prePaymentInfo;
+        }
+
+        @Override
+        public void onClick(View v) {
+            LoggerUtils.logInfo("On Delete called for " + prePaymentInfo);
+            dbHelper.delete(prePaymentInfo);
+            LoggerUtils.logInfo("No of records in db:" + dbHelper.numberOfRowsPrePayment());
+            loanInfoUpdateListener.onUpdate();
+        }
+    }
 }

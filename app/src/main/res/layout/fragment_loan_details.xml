@@ -13,23 +13,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Space
+        <!--<Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:longClickable="false"
-            android:minHeight="20dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:id="@+id/text_emi_val"
-            android:layout_height="match_parent"
-            android:text="sample1" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:longClickable="false"
-            android:minHeight="20dp" />
+            android:minHeight="20dp" />-->
 
         <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/pager"

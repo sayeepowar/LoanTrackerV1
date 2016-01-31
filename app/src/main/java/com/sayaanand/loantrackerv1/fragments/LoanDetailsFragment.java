@@ -108,8 +108,8 @@ public class LoanDetailsFragment extends Fragment {
 
         dbHelper = new LoanTrackerDBHelper(getActivity());
         loadLoanDetails();
-        TextView textView = (TextView)view.findViewById(R.id.text_emi_val);
-        textView.setText(emiDetails.get(0).getTotal().toString());
+        /*TextView textView = (TextView)view.findViewById(R.id.text_emi_val);
+        textView.setText(emiDetails.get(0).getTotal().toString());*/
         return view;
     }
 
@@ -329,7 +329,7 @@ public class LoanDetailsFragment extends Fragment {
         for (EMIDetails emiDetail : emiDetails) {
             totalPrincipal += emiDetail.getPrincipal().floatValue()+emiDetail.getPrePayment().floatValue();
             totalInterest += emiDetail.getInterest().floatValue();
-            totalTotal += emiDetail.getTotal().floatValue();
+            totalTotal += emiDetail.getTotal().floatValue()+emiDetail.getPrePayment().floatValue();
 
             Entry principal = new Entry(totalPrincipal, counter);
             valueSet1.add(principal);
