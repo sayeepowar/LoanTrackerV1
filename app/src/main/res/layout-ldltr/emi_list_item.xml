@@ -35,6 +35,14 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
+        android:id="@+id/text_emi_prepayment"
+        android:padding="5dp" />
+
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
         android:id="@+id/text_emi_total_prinicipal"
         android:padding="5dp" />
 
@@ -51,6 +59,22 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
+        android:id="@+id/text_emi_total_prepayment"
+        android:padding="5dp" />
+
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
         android:id="@+id/text_emi_total"
+        android:padding="5dp" />
+
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/text_emi_outstanding"
         android:padding="5dp" />
 </LinearLayout>

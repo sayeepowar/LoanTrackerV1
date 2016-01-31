@@ -11,9 +11,12 @@ public class EMIDetails implements Serializable{
     private Date emiDate;
     private Double principal;
     private Double interest;
+    private Double prePayment;
     private Double tillDatePrincipal;
     private Double tillDateInterest;
     private Double tillDateTotal;
+    private Double tillDatePrePayment;
+    private Double outstanding;
 
     public Double getPrincipal() {
         return principal;
@@ -65,5 +68,29 @@ public class EMIDetails implements Serializable{
 
     public void setTillDateTotal(Double tillDateTotal) {
         this.tillDateTotal = tillDateTotal;
+    }
+
+    public Double getPrePayment() {
+        return prePayment;
+    }
+
+    public void setPrePayment(Double prePayment) {
+        this.prePayment = prePayment;
+    }
+
+    public Double getTillDatePrePayment() {
+        return tillDatePrePayment;
+    }
+
+    public void setTillDatePrePayment(Double tillDatePrePayment) {
+        this.tillDatePrePayment = tillDatePrePayment;
+    }
+
+    public Double getOutstanding() {
+        return outstanding;
+    }
+
+    public void setOutstanding(Double outstanding) {
+        this.outstanding = outstanding;
     }
 }

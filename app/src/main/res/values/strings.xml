@@ -29,6 +29,7 @@
     <string name="button_send">Send</string>
     <string name="button_save">Save</string>
     <string name="button_clear">Clear</string>
+    <string name="button_reset">Reset</string>
     <string name="button_show_reports">Show Reports</string>
     <string name="title_activity_emicalculator1">EMI Amount</string>
 

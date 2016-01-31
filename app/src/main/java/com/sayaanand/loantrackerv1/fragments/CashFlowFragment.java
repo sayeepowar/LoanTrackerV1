@@ -19,7 +19,7 @@ import java.util.List;
  * Use the {@link CashFlowFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CashFlowFragment extends ListFragment {
+public class CashFlowFragment extends ListFragment implements IPagerFragmentInfo {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "emiList";
@@ -28,9 +28,21 @@ public class CashFlowFragment extends ListFragment {
     // TODO: Rename and change types of parameters
     private List<EMIDetails> mParam1;
     private String mParam2;
+    public static final int INDEX = 2;
+    public static String TITLE = "Cash Flow";
 
     public CashFlowFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public String getTitle() {
+        return TITLE;
+    }
+
+    @Override
+    public Integer getIndex() {
+        return INDEX;
     }
 
     /**

@@ -51,7 +51,9 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + LoanTrackerDBContract.LoanDetails.TABLE_NAME;
 
     private static final String SQL_SELECT_ENTRIES = "SELECT * FROM "+ LoanTrackerDBContract.LoanDetails.TABLE_NAME;
-    private static final String SQL_SELECT_ENTRY_WHERE = " WHERE " +LoanTrackerDBContract.LoanDetails.COLUMN_NAME_ID +" = ?";
+    private static final String SQL_SELECT_ENTRY_ID_CLAUSE = LoanTrackerDBContract.LoanDetails.COLUMN_NAME_ID +" = ?";
+    private static final String SQL_SELECT_ENTRY_WHERE = " WHERE " + SQL_SELECT_ENTRY_ID_CLAUSE;
+
 
     private static final String SQL_SELECT_PREPAYMENT = "SELECT * FROM "+ LoanTrackerDBContract.EMIPrepayments.TABLE_NAME;
     private static final String SQL_SELECT_PREPAYMENT_WHERE = " WHERE " +LoanTrackerDBContract.EMIPrepayments.COLUMN_NAME_LOAN_ID +" = ?";
@@ -84,6 +86,21 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
             contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_TENURE, loanInfo.getTenure());
             contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_EMI_DATE, loanInfo.getEmiDateStr());
             db.insert(LoanTrackerDBContract.LoanDetails.TABLE_NAME, null, contentValues);
+            return true;
+        }
+    }
+
+    public boolean update(LoanInfo loanInfo) {
+        try (SQLiteDatabase db = this.getWritableDatabase()) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_NAME, loanInfo.getName());
+            contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_TYPE, loanInfo.getType());
+            contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_PRINCIPAL, loanInfo.getPrincipal());
+            contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_INTEREST, loanInfo.getInterst());
+            contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_TENURE, loanInfo.getTenure());
+            contentValues.put(LoanTrackerDBContract.LoanDetails.COLUMN_NAME_EMI_DATE, loanInfo.getEmiDateStr());
+            int cnt = db.update(LoanTrackerDBContract.LoanDetails.TABLE_NAME, contentValues, SQL_SELECT_ENTRY_ID_CLAUSE,new String[]{String.valueOf(loanInfo.getId())} );
+            LoggerUtils.logInfo("Count Updated:"+cnt);
             return true;
         }
     }

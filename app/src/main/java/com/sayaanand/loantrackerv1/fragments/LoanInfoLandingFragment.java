@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 
 import com.sayaanand.loantrackerv1.R;
 import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
-import com.sayaanand.loantrackerv1.emi.vo.EMIDetails;
+import com.sayaanand.loantrackerv1.utils.LoggerUtils;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
 import com.sayaanand.loantrackerv1.vo.PrePaymentInfo;
 
@@ -26,12 +27,13 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Nandkishore.Powar on 26/01/2016.
  */
-public class LoanInfoLandingFragment extends ListFragment implements View.OnClickListener {
+public class LoanInfoLandingFragment extends Fragment implements View.OnClickListener,IPagerFragmentInfo {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "loanInfo";
@@ -41,10 +43,27 @@ public class LoanInfoLandingFragment extends ListFragment implements View.OnClic
     private LoanInfo loanInfo;
     private List<PrePaymentInfo> prePayments;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-
+    private EditText editTextDate = null;
+    private LoanDetailsFragment.LoanInfoUpdateListener loanInfoUpdateListener;
+    public static final int INDEX = 0;
+    public static String TITLE = "Loan Details";
 
     public LoanInfoLandingFragment() {
         // Required empty public constructor
+    }
+
+    public void setLoanInfoUpdateListener(LoanDetailsFragment.LoanInfoUpdateListener loanInfoUpdateListener) {
+        this.loanInfoUpdateListener = loanInfoUpdateListener;
+    }
+
+    @Override
+    public String getTitle() {
+        return TITLE;
+    }
+
+    @Override
+    public Integer getIndex() {
+        return INDEX;
     }
 
     /**
@@ -73,7 +92,7 @@ public class LoanInfoLandingFragment extends ListFragment implements View.OnClic
             prePayments = (List<PrePaymentInfo>)getArguments().getSerializable(ARG_PARAM2);
         }
 
-        setListAdapter(new PrepaymentsAdapter(getActivity(), prePayments));
+
     }
 
     @Override
@@ -87,11 +106,13 @@ public class LoanInfoLandingFragment extends ListFragment implements View.OnClic
         android.widget.Button buttonSave = (android.widget.Button)view.findViewById(R.id.button_save);
         buttonSave.setOnClickListener(this);
 
-        android.widget.Button buttonClear = (android.widget.Button)view.findViewById(R.id.button_clear);
-        buttonClear.setOnClickListener(this);
+        android.widget.Button buttonReset = (android.widget.Button)view.findViewById(R.id.button_reset);
+        buttonReset.setOnClickListener(this);
 
         android.widget.Button buttonCalendar = (android.widget.Button)view.findViewById(R.id.button2);
         buttonCalendar.setOnClickListener(this);
+
+        //setListAdapter(new PrepaymentsAdapter(getActivity(), prePayments));
 
         return view;
     }
@@ -107,8 +128,9 @@ public class LoanInfoLandingFragment extends ListFragment implements View.OnClic
         editTextInterest.setText(loanInfo.getInterst().toString());
         EditText editTextTenure = (EditText)view.findViewById(R.id.loan_text_info_tenure);
         editTextTenure.setText(loanInfo.getTenure().toString());
-        EditText editTextDate = (EditText)view.findViewById(R.id.loan_text_info_first_emit_date);
+        editTextDate = (EditText)view.findViewById(R.id.loan_text_info_first_emit_date);
         editTextDate.setText(loanInfo.getEmiDateStr());
+
     }
 
     private void setDisplayDate(String date) {
@@ -119,7 +141,7 @@ public class LoanInfoLandingFragment extends ListFragment implements View.OnClic
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        setListAdapter(null);
+        //setListAdapter(null);
     }
 
     @Override
@@ -128,8 +150,8 @@ public class LoanInfoLandingFragment extends ListFragment implements View.OnClic
             case R.id.button_save :
                 onSave();
                 break;
-            case R.id.button_clear:
-                onClear();
+            case R.id.button_reset:
+                onReset();
                 break;
             case R.id.button2:
                 showDatePickerDialog();
@@ -145,68 +167,65 @@ public class LoanInfoLandingFragment extends ListFragment implements View.OnClic
     }
 
     public void onSave() {
+        android.util.Log.i("LC", "Inside onSave");
+        TextView textViewName = (TextView)getView().findViewById(R.id.loan_text_info_name);
+        EditText editTextPrincipal = (EditText)getView().findViewById(R.id.loan_text_info_principal);
+        EditText editTextInterest = (EditText)getView().findViewById(R.id.loan_text_info_interest);
+        EditText editTextTenure = (EditText)getView().findViewById(R.id.loan_text_info_tenure);
+        EditText editTextDate = (EditText)getView().findViewById(R.id.loan_text_info_first_emit_date);
+
+        Double p = Double.parseDouble(editTextPrincipal.getText().toString());
+        Double n = Double.parseDouble(editTextTenure.getText().toString());
+        Double r = Double.parseDouble(editTextInterest.getText().toString());
+
+        int countBefore = dbHelper.numberOfRows();
+        LoanInfo loanInfo = new LoanInfo();
+        loanInfo.setId(this.loanInfo.getId());
+        loanInfo.setName(textViewName.getText().toString());
+        loanInfo.setType("O");
+        loanInfo.setPrincipal(p);
+        loanInfo.setInterst(r);
+        loanInfo.setTenure(n);
+        loanInfo.setEmiDateStr(editTextDate.getText().toString());
+        dbHelper.update(loanInfo);
+        LoggerUtils.logInfo("Details updated...");
+        int countAfter = dbHelper.numberOfRows();
+
+        LoggerUtils.logInfo("Before:"+countBefore+",After:"+countAfter);
+
+        this.loanInfoUpdateListener.onUpdate();
 
         android.util.Log.i("LC", "Inside onSave");
     }
 
-    public void onClear() {
+    public void onReset() {
+        android.util.Log.i("LC", "Inside onReset");
 
-        android.util.Log.i("LC", "Inside onClear");
+        TextView textViewName = (TextView)getView().findViewById(R.id.loan_text_info_name);
+        textViewName.setText(loanInfo.getName());
+        EditText editTextPrincipal = (EditText)getView().findViewById(R.id.loan_text_info_principal);
+        editTextPrincipal.setText(loanInfo.getPrincipal().toString());
+        EditText editTextInterest = (EditText)getView().findViewById(R.id.loan_text_info_interest);
+        editTextInterest.setText(loanInfo.getInterst().toString());
+        EditText editTextTenure = (EditText)getView().findViewById(R.id.loan_text_info_tenure);
+        editTextTenure.setText(loanInfo.getTenure().toString());
+        EditText editTextDate = (EditText)getView().findViewById(R.id.loan_text_info_first_emit_date);
+        editTextDate.setText(loanInfo.getEmiDateStr());
     }
 
-    public static class PrepaymentsAdapter extends BaseAdapter {
-        private final Context context;
-        private final List<PrePaymentInfo> values;
-
-
-        public PrepaymentsAdapter(Context context,List<PrePaymentInfo> values) {
-            this.context = context;
-            this.values = values;
-        }
-        @Override
-        public int getCount() {
-            return values.size();
-        }
-        @Override
-        public Object getItem(int position) {
-            return values.get(position);
-        }
-        @Override
-        public long getItemId(int position) {
-            return values.indexOf(getItem(position));
-        }
-
-        @Override
-        public View getView(int position, View view, ViewGroup parent) {
-            if (view == null) {
-                LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                view = mInflater.inflate(R.layout.emi_prepayments_item, null);
-            }
-
-            TextView mDateView;
-            TextView mAmountView;
-            TextView mCommentsView;
-
-            mDateView = (TextView) view.findViewById(R.id.text_prepayment_date);
-            mAmountView = (TextView) view.findViewById(R.id.text_prepayment_amount);
-            mCommentsView = (TextView) view.findViewById(R.id.text_prepayment_comments);
-
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-            DecimalFormat df = new DecimalFormat("#,###.##");
-
-            PrePaymentInfo mItem = values.get(position);
-            mDateView.setText(sdf.format(mItem.getDate()));
-            mAmountView.setText(df.format(mItem.getAmount()).toString());
-            mCommentsView.setText(mItem.getComments());
-            return view;
-        }
-    }
 
     public class SelectDateFragment extends DialogFragment implements android.app.DatePickerDialog.OnDateSetListener {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Calendar calendar = Calendar.getInstance();
+            String dateStr = editTextDate.getText().toString();
+            try {
+                Date date = sdf.parse(dateStr);
+                calendar.setTime(date);
+            } catch (Exception e) {}
+
+
             int yy = calendar.get(Calendar.YEAR);
             int mm = calendar.get(Calendar.MONTH);
             int dd = calendar.get(Calendar.DAY_OF_MONTH);

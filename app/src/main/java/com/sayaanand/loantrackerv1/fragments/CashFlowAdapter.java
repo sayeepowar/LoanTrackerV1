@@ -62,6 +62,9 @@ public class CashFlowAdapter extends BaseAdapter {
         TextView mTotalView = (TextView) view.findViewById(R.id.text_emi_total);
         TextView mTotalPrincipalView = (TextView) view.findViewById(R.id.text_emi_total_prinicipal);
         TextView mTotalInterestView = (TextView) view.findViewById(R.id.text_emi_total_interest);
+        TextView mPrePaymentView = (TextView) view.findViewById(R.id.text_emi_prepayment);
+        TextView mTotalPrePaymentView = (TextView) view.findViewById(R.id.text_emi_total_prepayment);
+        TextView mTotalOutStandingView = (TextView) view.findViewById(R.id.text_emi_outstanding);
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
@@ -71,9 +74,12 @@ public class CashFlowAdapter extends BaseAdapter {
         mIdView.setText(sdf.format(mItem.getEmiDate()));
         mNameView.setText(df.format(mItem.getPrincipal()).toString());
         mTypeView.setText(df.format(mItem.getInterest()).toString());
+        mPrePaymentView.setText(df.format(mItem.getPrePayment()));
         mTotalPrincipalView.setText(df.format(mItem.getTillDatePrincipal()));
         mTotalInterestView.setText(df.format(mItem.getTillDateInterest()));
+        mTotalPrePaymentView.setText(df.format(mItem.getTillDatePrePayment()));
         mTotalView.setText(df.format(mItem.getTillDateTotal()));
+        mTotalOutStandingView.setText(df.format(mItem.getOutstanding()));
         return view;
     }
 

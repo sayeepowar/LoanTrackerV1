@@ -20,9 +20,16 @@
         android:padding="5dp" />
 
     <TextView
-        android:layout_width="400dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Comments"
+        android:padding="5dp" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Action"
         android:padding="5dp" />
 </LinearLayout>

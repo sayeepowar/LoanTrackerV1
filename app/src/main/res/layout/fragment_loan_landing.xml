@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         >
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -192,8 +192,8 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:text="@string/button_clear"
-                android:id="@+id/button_clear"
+                android:text="@string/button_reset"
+                android:id="@+id/button_reset"
 
                 android:layout_column="2"
                 android:textColor="#f78d1b"
@@ -204,32 +204,6 @@
 
         </TableRow>
     </TableLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:minHeight="300dp">
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/horizontalScrollView"
-            android:background="#f3a4a4">
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                tools:context=".fragments.PrePayments">
-                <include layout="@layout/emi_prepayments_header"
-                    android:layout_width="match_parent"
-                    android:layout_height="38dp" />
-                <ListView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@android:id/list" />
-            </LinearLayout>
-        </HorizontalScrollView>
-    </LinearLayout>
     </LinearLayout>
     </ScrollView>
-</FrameLayout>
+</LinearLayout>

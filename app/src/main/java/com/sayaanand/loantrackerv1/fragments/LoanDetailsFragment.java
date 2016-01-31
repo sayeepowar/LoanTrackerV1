@@ -26,12 +26,15 @@ import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
 import com.sayaanand.loantrackerv1.emi.EMICalculator;
 import com.sayaanand.loantrackerv1.emi.ICalculator;
 import com.sayaanand.loantrackerv1.emi.vo.EMIDetails;
+import com.sayaanand.loantrackerv1.utils.LoggerUtils;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
 import com.sayaanand.loantrackerv1.vo.PrePaymentInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,15 +51,17 @@ public class LoanDetailsFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private LoanTrackerDBHelper dbHelper;
     private ICalculator calculator = new EMICalculator();
+    final static Map<Integer,String> titles = new HashMap<>();
 
     // TODO: Rename and change types of parameters
     private Integer loanId;
     private String mParam2;
-    private static LoanInfo loanInfo;
-    private static List<EMIDetails> emiDetails;
-    private static List<PrePaymentInfo> prePayments;
+    private LoanInfo loanInfo;
+    private List<EMIDetails> emiDetails;
+    private List<PrePaymentInfo> prePayments;
 
     private LoanDetailsPagerAdapter loanDetailsPagerAdapter;
+    private LoanInfoUpdateListenerImpl loanInfoUpdateListener = new LoanInfoUpdateListenerImpl();
 
     private OnFragmentInteractionListener mListener;
 
@@ -102,15 +107,20 @@ public class LoanDetailsFragment extends Fragment {
         mViewPager.setAdapter(loanDetailsPagerAdapter);
 
         dbHelper = new LoanTrackerDBHelper(getActivity());
+        loadLoanDetails();
+        TextView textView = (TextView)view.findViewById(R.id.text_emi_val);
+        textView.setText(emiDetails.get(0).getTotal().toString());
+        return view;
+    }
+
+    private  void loadLoanDetails() {
         loanInfo = dbHelper.select(loanId);
         prePayments = dbHelper.selectPrePayments(loanId);
         emiDetails = calculator.getEMIDetails(loanInfo.getPrincipal()
                 , loanInfo.getInterst()
                 , loanInfo.getTenure()
-                , loanInfo.getEmiDate());
-        TextView textView = (TextView)view.findViewById(R.id.text_emi_val);
-        textView.setText(emiDetails.get(0).getTotal().toString());
-        return view;
+                , loanInfo.getEmiDate(),
+                prePayments);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -152,7 +162,25 @@ public class LoanDetailsFragment extends Fragment {
         void onFragmentInteractionLoanDetails(Uri uri);
     }
 
-    public static class LoanDetailsPagerAdapter extends FragmentStatePagerAdapter {
+    public interface LoanInfoUpdateListener {
+        void onUpdate();
+    }
+
+    class LoanInfoUpdateListenerImpl implements LoanInfoUpdateListener {
+        public void onUpdate() {
+            LoggerUtils.logInfo("On Update callback....");
+            loadLoanDetails();
+            titles.remove(LoanRepaymentsFragment.INDEX);
+            titles.remove(CashFlowFragment.INDEX);
+            titles.remove(BarChartFragment.INDEX);
+            titles.remove(LineChartFragment.INDEX);
+            loanDetailsPagerAdapter.notifyDataSetChanged();
+            LoggerUtils.logInfo("OnUpdate completed....");
+        }
+    }
+
+
+    public class LoanDetailsPagerAdapter extends FragmentStatePagerAdapter {
 
         public LoanDetailsPagerAdapter(FragmentManager fm){
             super(fm);
@@ -160,46 +188,79 @@ public class LoanDetailsFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
+
+
+
             switch (position) {
-                case 3:
+                case LineChartFragment.INDEX:
                     Fragment lineChartFragment = new LineChartFragment();
                     Bundle lineArgs = new Bundle();
                     lineChartFragment.setArguments(lineArgs);
+                    titles.put(LineChartFragment.INDEX, ((IPagerFragmentInfo) lineChartFragment).getTitle());
                     return lineChartFragment;
-                case 2:
+                case BarChartFragment.INDEX:
                     Fragment barChartFragment = new BarChartFragment();
                     Bundle barArgs = new Bundle();
                     barChartFragment.setArguments(barArgs);
+                    titles.put(BarChartFragment.INDEX, ((IPagerFragmentInfo) barChartFragment).getTitle());
                     return barChartFragment;
-                case 1:
+                case CashFlowFragment.INDEX:
                     Fragment emiListFragment = CashFlowFragment.newInstance(emiDetails, null);
+                    titles.put(CashFlowFragment.INDEX, ((IPagerFragmentInfo) emiListFragment).getTitle());
                     return emiListFragment;
-                case 0 :
-                    Fragment landingFragment = LoanInfoLandingFragment.newInstance(loanInfo, prePayments);
+                case LoanInfoLandingFragment.INDEX:
+                    LoanInfoLandingFragment landingFragment = LoanInfoLandingFragment.newInstance(loanInfo, prePayments);
+                    landingFragment.setLoanInfoUpdateListener(loanInfoUpdateListener);
+                    titles.put(LoanInfoLandingFragment.INDEX, landingFragment.getTitle());
                     return landingFragment;
+                case LoanRepaymentsFragment.INDEX:
+                    LoanRepaymentsFragment loanRepaymentsFragment = LoanRepaymentsFragment.newInstance(loanInfo, prePayments);
+                    loanRepaymentsFragment.setLoanInfoUpdateListener(loanInfoUpdateListener);
+                    titles.put(LoanRepaymentsFragment.INDEX, loanRepaymentsFragment.getTitle());
+                    return loanRepaymentsFragment;
             }
             return null;
         }
 
+        public int getItemPosition(Object item) {
+            int position=-1;
+
+            if (item instanceof IPagerFragmentInfo) {
+                IPagerFragmentInfo iPagerFragmentInfo = (IPagerFragmentInfo)item;
+                if (titles.containsKey(iPagerFragmentInfo.getIndex())) {
+                    position = iPagerFragmentInfo.getIndex();
+                }
+            }
+
+            if (position >= 0) {
+                return position;
+            } else {
+                return POSITION_NONE;
+            }
+        }
+
         @Override
         public int getCount() {
-            return 3;
+            return 5;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0: return "Loan Details";
-                case 1: return "Cash Flow";
-                case 2: return "Bar Chart";
-                case 3: return "Line Chart";
+                case LoanInfoLandingFragment.INDEX: return LoanInfoLandingFragment.TITLE;
+                case LoanRepaymentsFragment.INDEX: return LoanRepaymentsFragment.TITLE;
+                case CashFlowFragment.INDEX: return CashFlowFragment.TITLE;
+                case BarChartFragment.INDEX: return BarChartFragment.TITLE;
+                case LineChartFragment.INDEX: return LineChartFragment.TITLE;
 
             }
             return "OBJECT " + (position + 1);
         }
     }
 
-    public static class LineChartFragment extends Fragment {
+    public class LineChartFragment extends Fragment implements IPagerFragmentInfo {
+        public static final int INDEX = 4;
+        public static final String TITLE = "Line Chart";
         //List<EMIDetails> emiDetails;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -214,9 +275,21 @@ public class LoanDetailsFragment extends Fragment {
             lineChart.invalidate();
             return rootView;
         }
+        @Override
+        public String getTitle() {
+            return TITLE;
+        }
+
+        @Override
+        public Integer getIndex() {
+            return INDEX;
+        }
+
     }
 
-    public static class BarChartFragment extends Fragment {
+    public class BarChartFragment extends Fragment implements IPagerFragmentInfo {
+        public static final int INDEX = 3;
+        public static final String TITLE = "Bar Chart";
         //List<EMIDetails> emiDetails;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -231,19 +304,30 @@ public class LoanDetailsFragment extends Fragment {
             chart.invalidate();
             return rootView;
         }
+        @Override
+        public String getTitle() {
+            return TITLE;
+        }
+
+        @Override
+        public Integer getIndex() {
+            return INDEX;
+        }
+
     }
 
-    private static ArrayList<LineDataSet> getLineDataSet(List<EMIDetails> emiDetails) {
+    private  ArrayList<LineDataSet> getLineDataSet(List<EMIDetails> emiDetails) {
         ArrayList<LineDataSet> dataSets = null;
 
         ArrayList<Entry> valueSet1 = new ArrayList<>();
         ArrayList<Entry> valueSet2 = new ArrayList<>();
         ArrayList<Entry> valueSet3 = new ArrayList<>();
+        ArrayList<Entry> valueSet4 = new ArrayList<>();
 
         int counter = 0;
         float totalPrincipal = 0.0f, totalInterest = 0.0f, totalTotal = 0.0f;
         for (EMIDetails emiDetail : emiDetails) {
-            totalPrincipal += emiDetail.getPrincipal().floatValue();
+            totalPrincipal += emiDetail.getPrincipal().floatValue()+emiDetail.getPrePayment().floatValue();
             totalInterest += emiDetail.getInterest().floatValue();
             totalTotal += emiDetail.getTotal().floatValue();
 
@@ -253,6 +337,8 @@ public class LoanDetailsFragment extends Fragment {
             valueSet2.add(interest);
             Entry total = new Entry(totalTotal, counter);
             valueSet3.add(total);
+            Entry outstanding = new Entry(emiDetail.getOutstanding().floatValue()*-1.0f, counter);
+            valueSet4.add(outstanding);
 
             counter++;
         }
@@ -263,15 +349,18 @@ public class LoanDetailsFragment extends Fragment {
         lineDataSet2.setColor(Color.rgb(155, 0, 0));
         LineDataSet lineDataSet3 = new LineDataSet(valueSet3, "Total");
         lineDataSet3.setColor(Color.rgb(0, 0, 155));
+        LineDataSet lineDataSet4 = new LineDataSet(valueSet4, "OutStanding");
+        lineDataSet4.setColor(Color.rgb(0, 155, 155));
 
         dataSets = new ArrayList<>();
         dataSets.add(lineDataSet1);
         dataSets.add(lineDataSet2);
         dataSets.add(lineDataSet3);
+        dataSets.add(lineDataSet4);
         return dataSets;
     }
 
-    private static ArrayList<BarDataSet> getDataSet(List<EMIDetails> emiDetails) {
+    private  ArrayList<BarDataSet> getDataSet(List<EMIDetails> emiDetails) {
         ArrayList<BarDataSet> dataSets = null;
 
         ArrayList<BarEntry> valueSet1 = new ArrayList<>();
@@ -279,13 +368,13 @@ public class LoanDetailsFragment extends Fragment {
 
         int counter = 0;
         for (EMIDetails emiDetail : emiDetails) {
-            BarEntry principal = new BarEntry(emiDetail.getPrincipal().floatValue(), counter);
+            BarEntry principal = new BarEntry(emiDetail.getPrincipal().floatValue()+emiDetail.getPrePayment().floatValue(), counter);
             valueSet1.add(principal);
             BarEntry interest = new BarEntry(emiDetail.getInterest().floatValue(), counter++); // Jan
             valueSet2.add(interest);
         }
 
-        BarDataSet barDataSet1 = new BarDataSet(valueSet1, "Principal");
+        BarDataSet barDataSet1 = new BarDataSet(valueSet1, "Principal+PrePayment");
         barDataSet1.setColor(Color.rgb(0, 155, 0));
         BarDataSet barDataSet2 = new BarDataSet(valueSet2, "Interest");
         barDataSet2.setColor(Color.rgb(155, 0, 0));

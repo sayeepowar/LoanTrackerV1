@@ -2,11 +2,13 @@ package com.sayaanand.loantrackerv1.emi;
 
 import com.sayaanand.loantrackerv1.emi.vo.EMIDetails;
 import com.sayaanand.loantrackerv1.utils.LoggerUtils;
+import com.sayaanand.loantrackerv1.vo.PrePaymentInfo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Created by Nandkishore.Powar on 29/12/2015.
@@ -44,28 +46,66 @@ public class EMICalculator implements ICalculator {
 
 
     @Override
-    public List<EMIDetails> getEMIDetails(double principal, double interest, double tenor, Date startDate) {
+    public List<EMIDetails> getEMIDetails(double principal, double interest, double tenor, Date startDate, List<PrePaymentInfo> prePayments) {
         LoggerUtils.logInfo("principal:"+principal);
         LoggerUtils.logInfo("interest:"+interest);
         LoggerUtils.logInfo("tenor:"+tenor);
         LoggerUtils.logInfo("startDate:"+startDate);
 
         List<EMIDetails> results = new ArrayList<>();
+        Calendar c = Calendar.getInstance();
+        c.setTime(startDate);
+
+        TreeMap<Calendar,PrePaymentInfo> mapPrePayments = new TreeMap<>();
+        if (prePayments!=null && !prePayments.isEmpty()) {
+            for (PrePaymentInfo prePaymentInfo :
+                    prePayments) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(prePaymentInfo.getDate());
+                if (calendar.before(c)) { //ignore if it is before first emi.
+                    continue;
+                }
+                mapPrePayments.put(calendar, prePaymentInfo);
+            }
+        }
+
 
         double outstaningAmount = principal;
         double monthlyRest = interest / (12 * 100);
 
-        double tillDatePrincipal=0.0,tillDateInterest=0.0,tillDateTotal=0.0;
-        Calendar c = Calendar.getInstance();
-        c.setTime(startDate);
+        double tillDatePrincipal=0.0,tillDateInterest=0.0,tillDateTotal=0.0,tillDatePrePaymentTotal=0.0;
+
+        boolean lastEMI = false;
         Double emi = calculate(principal, interest, tenor);
+        outer:
         for (int i=1; i<= tenor ; i++) { // for all tenors
             for (int month = 1; month <=12 ; month++) { // for each month
+                double prepayment = 0.0;
+                //check if there is any prepayment
+                for(Calendar prePaymentCal:mapPrePayments.keySet()) {
+                    if (prePaymentCal.get(Calendar.YEAR) == c.get(Calendar.YEAR)
+                            && prePaymentCal.get(Calendar.MONTH) == c.get(Calendar.MONTH)) { // current month
+                        PrePaymentInfo prePaymentInfo = mapPrePayments.get(prePaymentCal);
+                        prepayment += prePaymentInfo.getAmount();
+                    }
+                }
+
+                tillDatePrePaymentTotal += prepayment;
+                outstaningAmount -= prepayment;
                 double simpleMonthInterest =  outstaningAmount * monthlyRest;
+
+                if (outstaningAmount+simpleMonthInterest < emi) {
+                    lastEMI = true;
+                    emi = outstaningAmount+simpleMonthInterest;
+                }
+
+
                 EMIDetails emiDetails = new EMIDetails();
                 emiDetails.setEmiDate(c.getTime());
                 emiDetails.setPrincipal(emi - simpleMonthInterest);
                 emiDetails.setInterest(simpleMonthInterest);
+                emiDetails.setPrePayment(prepayment);
+
                 results.add(emiDetails);
                 //reduce interest
                 outstaningAmount = outstaningAmount - emiDetails.getPrincipal();
@@ -73,13 +113,22 @@ public class EMICalculator implements ICalculator {
                 c.add(Calendar.MONTH, 1);
 
                 tillDatePrincipal += emiDetails.getPrincipal();
+                tillDatePrincipal +=prepayment;
                 emiDetails.setTillDatePrincipal(tillDatePrincipal);
 
                 tillDateInterest += emiDetails.getInterest();
                 emiDetails.setTillDateInterest(tillDateInterest);
 
                 tillDateTotal += emiDetails.getTotal();
+                tillDateTotal += prepayment;
                 emiDetails.setTillDateTotal(tillDateTotal);
+
+                emiDetails.setTillDatePrePayment(tillDatePrePaymentTotal);
+                emiDetails.setOutstanding(outstaningAmount*-1.0);
+
+                if (lastEMI) {
+                    break outer;
+                }
             }
         }
         return results;
