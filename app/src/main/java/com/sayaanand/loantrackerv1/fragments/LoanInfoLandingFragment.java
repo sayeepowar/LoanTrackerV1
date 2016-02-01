@@ -24,6 +24,9 @@ import com.sayaanand.loantrackerv1.R;
 import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
 import com.sayaanand.loantrackerv1.utils.LoggerUtils;
 import com.sayaanand.loantrackerv1.utils.Utility;
+import com.sayaanand.loantrackerv1.validations.LoanNameValidator;
+import com.sayaanand.loantrackerv1.validations.NumberValidator;
+import com.sayaanand.loantrackerv1.validations.TextValidator;
 import com.sayaanand.loantrackerv1.vo.LoanInfo;
 import com.sayaanand.loantrackerv1.vo.PrePaymentInfo;
 
@@ -126,12 +129,16 @@ public class LoanInfoLandingFragment extends Fragment implements View.OnClickLis
         super.onViewCreated(view, savedInstanceState);
         EditText textViewName = (EditText)view.findViewById(R.id.loan_text_info_name);
         textViewName.setText(loanInfo.getName());
+        textViewName.addTextChangedListener(new LoanNameValidator(textViewName, loanInfo, dbHelper));
         EditText editTextPrincipal = (EditText)view.findViewById(R.id.loan_text_info_principal);
         editTextPrincipal.setText(loanInfo.getPrincipal().toString());
+        editTextPrincipal.addTextChangedListener(new NumberValidator(editTextPrincipal));
         EditText editTextInterest = (EditText)view.findViewById(R.id.loan_text_info_interest);
         editTextInterest.setText(loanInfo.getInterst().toString());
+        editTextInterest.addTextChangedListener(new NumberValidator(editTextInterest));
         EditText editTextTenure = (EditText)view.findViewById(R.id.loan_text_info_tenure);
         editTextTenure.setText(loanInfo.getTenure().toString());
+        editTextTenure.addTextChangedListener(new NumberValidator(editTextTenure));
         editTextDate = (EditText)view.findViewById(R.id.loan_text_info_first_emit_date);
         editTextDate.setText(loanInfo.getEmiDateStr());
 

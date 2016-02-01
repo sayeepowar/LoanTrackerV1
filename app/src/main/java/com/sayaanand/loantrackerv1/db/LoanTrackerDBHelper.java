@@ -50,9 +50,14 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + LoanTrackerDBContract.LoanDetails.TABLE_NAME;
 
+
+
     private static final String SQL_SELECT_ENTRIES = "SELECT * FROM "+ LoanTrackerDBContract.LoanDetails.TABLE_NAME;
     private static final String SQL_SELECT_ENTRY_ID_CLAUSE = LoanTrackerDBContract.LoanDetails.COLUMN_NAME_ID +" = ?";
     private static final String SQL_SELECT_ENTRY_WHERE = " WHERE " + SQL_SELECT_ENTRY_ID_CLAUSE;
+    private static final String SQL_CHECK_DUPLICATE_LOAN_WHERE = " WHERE " +
+                                                            LoanTrackerDBContract.LoanDetails.COLUMN_NAME_ID +" != ? AND "+
+                                                            LoanTrackerDBContract.LoanDetails.COLUMN_NAME_NAME +" = ? ";
 
 
     private static final String SQL_SELECT_PREPAYMENT = "SELECT * FROM "+ LoanTrackerDBContract.EMIPrepayments.TABLE_NAME;
@@ -70,8 +75,8 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        db.execSQL(SQL_DELETE_ENTRIES);
-        onCreate(db);
+        //db.execSQL(SQL_DELETE_ENTRIES);
+        //onCreate(db);
     }
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
@@ -169,6 +174,18 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
             }
             LoanInfo loanInfo = getLoanInfo(cursor);
             return loanInfo;
+        }
+    }
+
+    public boolean checkIfExists(Integer loanId, String loanName) {
+        try (SQLiteDatabase db = this.getReadableDatabase()) {
+            Cursor cursor = db.rawQuery(SQL_SELECT_ENTRIES + SQL_CHECK_DUPLICATE_LOAN_WHERE, new String[]{loanId.toString(), loanName});
+            if (!cursor.moveToFirst()) {
+                return false;
+            }
+            LoggerUtils.logInfo(loanName+ " exists");
+
+            return true;
         }
     }
 
