@@ -218,4 +218,10 @@ public class LoanTrackerDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void delete(LoanInfo loanInfo) {
+        try (SQLiteDatabase db = this.getWritableDatabase()) {
+            int rowCountUpdated = db.delete(LoanTrackerDBContract.LoanDetails.TABLE_NAME, SQL_SELECT_ENTRY_ID_CLAUSE, new String[]{String.valueOf(loanInfo.getId())});
+            LoggerUtils.logInfo("Rows deleted:"+rowCountUpdated);
+        }
+    }
 }

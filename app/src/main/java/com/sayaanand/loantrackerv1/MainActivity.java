@@ -33,7 +33,8 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements
         CreateLoanFragment.OnFragmentInteractionListener,
         LoanInfoFragment.OnListFragmentInteractionListener,
-        LoanDetailsFragment.OnFragmentInteractionListener {
+        LoanDetailsFragment.OnFragmentInteractionListener,
+        MainActivityFragment.OnMainFragmentInteractionListener  {
 
     private LoanTrackerDBHelper dbHelper;
 
@@ -124,6 +125,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
         android.util.Log.i("LC", "Fragment Interaction from Loan Details");
+        loadShowMyLoans();
+    }
+
+    @Override
+    public void reloadMainFragment() {
         loadShowMyLoans();
     }
 }
