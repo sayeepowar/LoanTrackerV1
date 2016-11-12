@@ -6,9 +6,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".fragments.MainActivityFragment"
-    android:background="#ffffff"
-    android:orientation="vertical">
+    tools:context="com.sayaanand.loantrackerv1.MainActivityFragment"
+    tools:showIn="@layout/activity_main"
+    android:background="#ffffff">
 
     <TextView
         android:layout_width="wrap_content"
@@ -16,93 +16,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/welcome_msg_1"
         android:id="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_marginTop="31dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="My Loans"
-        android:id="@+id/textView3"
-        android:layout_marginTop="45dp"
-        android:layout_below="@+id/textView" />
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/horizontalScrollView1"
-        android:layout_below="@+id/textView3"
-        >
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".fragments.Main">
-
-        <include layout="@layout/loan_list_header"
-            android:id="@+id/header_line"
-            android:layout_width="match_parent"
-            android:layout_below="@+id/textView3"
-            android:layout_height="48dp" />
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@android:id/list" />
-    </LinearLayout>
-    </HorizontalScrollView>
-    <!--
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-
-        android:layout_below="@+id/textView3"
-        >
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/horizontalScrollView"
-            >
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                tools:context=".fragments.Main">
-                <include layout="@layout/loan_list_header"
-                    android:layout_width="match_parent"
-                    android:layout_height="38dp" />
-                <fragment
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:name="com.sayaanand.loantrackerv1.fragments.LoanInfoFragment"
-                    android:id="@+id/fragment2"
-                    android:layout_below="@+id/textView3"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-            </LinearLayout>
-        </HorizontalScrollView>
-    </LinearLayout>
--->
-    <!--
-        <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:layout_weight="1"
-            android:layout_below="@+id/textView3">
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/loan_table"
-                android:isScrollContainer="true"
-                android:stretchColumns="0">
-            </TableLayout>
-        </ScrollView>
-    -->
-
-
 
 </RelativeLayout>

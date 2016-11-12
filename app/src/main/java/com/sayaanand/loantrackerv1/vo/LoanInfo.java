@@ -1,11 +1,10 @@
 package com.sayaanand.loantrackerv1.vo;
 
-import java.io.Serializable;
 import java.util.Date;
 /**
  * Created by Nandkishore.Powar on 16/01/2016.
  */
-public class LoanInfo implements Serializable{
+public class LoanInfo {
 
     private static java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd-MMM-yyyy");
     private int id;
@@ -25,14 +24,6 @@ public class LoanInfo implements Serializable{
         this.interst = interst;
         this.tenure = tenure;
         this.emiDate = emiDate;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public java.lang.String getName() {
@@ -97,16 +88,4 @@ public class LoanInfo implements Serializable{
         return null;
     }
 
-    @Override
-    public String toString() {
-        return "LoanInfo{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", principal=" + principal +
-                ", interst=" + interst +
-                ", tenure=" + tenure +
-                ", emiDate=" + emiDate +
-                '}';
-    }
 }

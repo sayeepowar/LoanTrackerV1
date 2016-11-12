@@ -1,22 +1,15 @@
 package com.sayaanand.loantrackerv1.emi.vo;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Nandkishore.Powar on 30/12/2015.
  */
-public class EMIDetails implements Serializable{
+public class EMIDetails {
 
     private Date emiDate;
     private Double principal;
     private Double interest;
-    private Double prePayment;
-    private Double tillDatePrincipal;
-    private Double tillDateInterest;
-    private Double tillDateTotal;
-    private Double tillDatePrePayment;
-    private Double outstanding;
 
     public Double getPrincipal() {
         return principal;
@@ -44,53 +37,5 @@ public class EMIDetails implements Serializable{
 
     public void setEmiDate(Date emiDate) {
         this.emiDate = emiDate;
-    }
-
-    public Double getTillDatePrincipal() {
-        return tillDatePrincipal;
-    }
-
-    public void setTillDatePrincipal(Double tillDatePrincipal) {
-        this.tillDatePrincipal = tillDatePrincipal;
-    }
-
-    public Double getTillDateInterest() {
-        return tillDateInterest;
-    }
-
-    public void setTillDateInterest(Double tillDateInterest) {
-        this.tillDateInterest = tillDateInterest;
-    }
-
-    public Double getTillDateTotal() {
-        return tillDateTotal;
-    }
-
-    public void setTillDateTotal(Double tillDateTotal) {
-        this.tillDateTotal = tillDateTotal;
-    }
-
-    public Double getPrePayment() {
-        return prePayment;
-    }
-
-    public void setPrePayment(Double prePayment) {
-        this.prePayment = prePayment;
-    }
-
-    public Double getTillDatePrePayment() {
-        return tillDatePrePayment;
-    }
-
-    public void setTillDatePrePayment(Double tillDatePrePayment) {
-        this.tillDatePrePayment = tillDatePrePayment;
-    }
-
-    public Double getOutstanding() {
-        return outstanding;
-    }
-
-    public void setOutstanding(Double outstanding) {
-        this.outstanding = outstanding;
     }
 }

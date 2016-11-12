@@ -20,12 +20,4 @@ public final class LoanTrackerDBContract {
         public static final String COLUMN_NAME_EMI_DATE = "emiDate";
     }
 
-    public static abstract class EMIPrepayments implements BaseColumns {
-        public static final String TABLE_NAME = "prepayments";
-        public static final String COLUMN_NAME_ID = "id";
-        public static final String COLUMN_NAME_LOAN_ID = "loan_id";
-        public static final String COLUMN_NAME_AMOUNT = "amount";
-        public static final String COLUMN_NAME_DATE = "date";
-        public static final String COLUMN_NAME_COMMENTS = "comments";
-    }
 }
