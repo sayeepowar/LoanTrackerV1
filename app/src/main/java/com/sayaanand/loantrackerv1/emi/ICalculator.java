@@ -1,6 +1,7 @@
 package com.sayaanand.loantrackerv1.emi;
 
 import com.sayaanand.loantrackerv1.emi.vo.EMIDetails;
+import com.sayaanand.loantrackerv1.vo.PrePaymentInfo;
 
 import java.util.Date;
 import java.util.List;
@@ -11,5 +12,5 @@ import java.util.List;
 public interface ICalculator {
 
     public double calculate(double principal, double interest, double tenor);
-    public List<EMIDetails> getEMIDetails(double principal, double interest, double tenor, Date startDate);
+    public List<EMIDetails> getEMIDetails(double principal, double interest, double tenor, Date startDate, List<PrePaymentInfo> prePayments);
 }

@@ -1,9 +1,10 @@
 package com.sayaanand.loantrackerv1;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,14 +18,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.sayaanand.loantrackerv1.db.LoanTrackerDBHelper;
+import com.sayaanand.loantrackerv1.fragments.CreateLoanFragment;
+import com.sayaanand.loantrackerv1.fragments.LoanDetailsFragment;
+import com.sayaanand.loantrackerv1.fragments.LoanInfoFragment;
+import com.sayaanand.loantrackerv1.fragments.MainActivityFragment;
 import com.sayaanand.loantrackerv1.utils.LoggerUtils;
+import com.sayaanand.loantrackerv1.vo.LoanInfo;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements CreateLoanFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements
+        CreateLoanFragment.OnFragmentInteractionListener,
+        LoanInfoFragment.OnListFragmentInteractionListener,
+        LoanDetailsFragment.OnFragmentInteractionListener,
+        MainActivityFragment.OnMainFragmentInteractionListener  {
 
     private LoanTrackerDBHelper dbHelper;
 
@@ -66,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements CreateLoanFragmen
                 loadCreateLoanForm();
                 return true;
             case R.id.action_show_loans:
+                loadShowMyLoans();
                 return true;
             case R.id.action_show_alerts:
                 return true;
@@ -83,14 +94,42 @@ public class MainActivity extends AppCompatActivity implements CreateLoanFragmen
         Bundle args = new Bundle();
         createLoanFragment.setArguments(args);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment, createLoanFragment);
+        transaction.replace(R.id.fragment_container, createLoanFragment);
+        transaction.addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    private void loadShowMyLoans() {
+        LoggerUtils.logInfo("Show my loans");
+        MainActivityFragment mainActivityFragment = new MainActivityFragment();
+        Bundle args = new Bundle();
+        mainActivityFragment.setArguments(args);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, mainActivityFragment);
         transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();
     }
 
     @java.lang.Override
-    public void onFragmentInteraction(android.net.Uri uri) {
+    public void onFragmentInteractionLoanDetails(android.net.Uri uri) {
         android.util.Log.i("LC", "Fragment Interaction");
+    }
+
+    @java.lang.Override
+    public void onListFragmentInteraction(LoanInfo item) {
+        android.util.Log.i("LC", "Fragment Interaction");
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        android.util.Log.i("LC", "Fragment Interaction from Loan Details");
+        loadShowMyLoans();
+    }
+
+    @Override
+    public void reloadMainFragment() {
+        loadShowMyLoans();
     }
 }
